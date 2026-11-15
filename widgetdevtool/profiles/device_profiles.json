@@ -1,0 +1,711 @@
+{
+ "version": 1,
+ "icue_branch": "v5.55",
+ "profiles": [
+  {
+   "id": "link_generic_lcd",
+   "name": "iCUE LINK GENERIC LCD",
+   "kind": "dashboard",
+   "html_types": [
+    "DashboardLCD",
+    "PumpDashboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/link_generic_lcd/res/manifests/link_generic_lcd_manifest.cuemsf",
+   "sha256": "d92497310894cd59f4d37a11c6e3c37cc922ea776c9b27679cea9fd06a1c517e",
+   "auto_rotation": true,
+   "initial_orientation": "",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "",
+   "touch_setup": false,
+   "mimic": [
+    480,
+    270
+   ],
+   "physical": [
+    1280,
+    720
+   ],
+   "fixed": [
+    0,
+    0
+   ],
+   "sizes": {
+    "SizeL": {
+     "landscape": [
+      0.98125,
+      0.9666666666666667
+     ],
+     "portrait": [
+      0.9666666666666667,
+      0.98125
+     ]
+    },
+    "SizeM": {
+     "landscape": [
+      0.4875,
+      0.9666666666666667
+     ],
+     "portrait": [
+      0.9666666666666667,
+      0.4875
+     ]
+    },
+    "SizeS": {
+     "landscape": [
+      0.4875,
+      0.47778
+     ],
+     "portrait": [
+      0.9666666666666667,
+      0.240625
+     ]
+    }
+   },
+   "grid": {
+    "landscape": [
+     [
+      0.009375,
+      0.0166666666666667
+     ],
+     [
+      0.009375,
+      0.5055555555555556
+     ],
+     [
+      0.503125,
+      0.0166666666666667
+     ],
+     [
+      0.503125,
+      0.5055555555555556
+     ]
+    ],
+    "portrait": [
+     [
+      0.0166666666666667,
+      0.009375
+     ],
+     [
+      0.0166666666666667,
+      0.25625
+     ],
+     [
+      0.0166666666666667,
+      0.503125
+     ],
+     [
+      0.0166666666666667,
+      0.75
+     ]
+    ]
+   }
+  },
+  {
+   "id": "taiga_lcd",
+   "name": "NAUTILUS II LCD",
+   "kind": "dashboard",
+   "html_types": [
+    "DashboardLCD",
+    "PumpDashboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/taiga_lcd/res/manifests/taiga_lcd_manifest.cuemsf",
+   "sha256": "bdd4997a3dbda9fc080afac29d10415f23688b46cddfe44890c9099d0952d0b3",
+   "auto_rotation": null,
+   "initial_orientation": "Degree270",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "",
+   "touch_setup": false,
+   "mimic": [
+    328,
+    246
+   ],
+   "physical": [
+    640,
+    480
+   ],
+   "fixed": [
+    0,
+    0
+   ],
+   "sizes": {
+    "SizeM": {
+     "landscape": [
+      0.9625,
+      0.95
+     ],
+     "portrait": [
+      0.95,
+      0.9625
+     ]
+    },
+    "SizeS": {
+     "landscape": [
+      0.9625,
+      0.4667
+     ],
+     "portrait": [
+      0.95,
+      0.475
+     ]
+    }
+   },
+   "grid": {
+    "landscape": [
+     [
+      0.01875,
+      0.025
+     ],
+     [
+      0.01875,
+      0.508333
+     ]
+    ],
+    "portrait": [
+     [
+      0.025,
+      0.01875
+     ],
+     [
+      0.025,
+      0.50625
+     ]
+    ]
+   }
+  },
+  {
+   "id": "dash_accessory_lcd",
+   "name": "XENEON EDGE",
+   "kind": "dashboard",
+   "html_types": [
+    "DashboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/dash_accessory_lcd/res/manifests/dash_accessory_lcd_manifest.cuemsf",
+   "sha256": "d72a1a3fcc896e201218f09d391c193396f365f86b25560345d01f5bf85520a4",
+   "auto_rotation": true,
+   "initial_orientation": "",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "",
+   "touch_setup": true,
+   "mimic": [
+    960,
+    270
+   ],
+   "physical": [
+    2560,
+    720
+   ],
+   "fixed": [
+    0,
+    0
+   ],
+   "sizes": {
+    "SizeL": {
+     "landscape": [
+      0.659375,
+      0.9666666666666667
+     ],
+     "portrait": [
+      0.9666666666666667,
+      0.659375
+     ]
+    },
+    "SizeM": {
+     "landscape": [
+      0.328125,
+      0.9666666666666667
+     ],
+     "portrait": [
+      0.9666666666666667,
+      0.328125
+     ]
+    },
+    "SizeS": {
+     "landscape": [
+      0.328125,
+      0.4777777777777778
+     ],
+     "portrait": [
+      0.9666666666666667,
+      0.1625
+     ]
+    },
+    "SizeXL": {
+     "landscape": [
+      0.990625,
+      0.9666666666666667
+     ],
+     "portrait": [
+      0.9666666666666667,
+      0.990625
+     ]
+    }
+   },
+   "grid": {
+    "landscape": [
+     [
+      0.004167,
+      0.014815
+     ],
+     [
+      0.004167,
+      0.507407
+     ],
+     [
+      0.335417,
+      0.014815
+     ],
+     [
+      0.335417,
+      0.507407
+     ],
+     [
+      0.667708,
+      0.014815
+     ],
+     [
+      0.667708,
+      0.507407
+     ]
+    ],
+    "portrait": [
+     [
+      0.014815,
+      0.004167
+     ],
+     [
+      0.014815,
+      0.170833
+     ],
+     [
+      0.014815,
+      0.3375
+     ],
+     [
+      0.014815,
+      0.504167
+     ],
+     [
+      0.014815,
+      0.671875
+     ],
+     [
+      0.014815,
+      0.8375
+     ]
+    ]
+   }
+  },
+  {
+   "id": "vanguard_96",
+   "name": "VANGUARD 96",
+   "kind": "keyboard",
+   "html_types": [
+    "KeyboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/vanguard_96/res/manifests/vanguard_96_manifest.cuemsf",
+   "sha256": "8cee8fcffba455df31f0d227dce6078fc31fd0db238edf04a7e379b77eff12e9",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "ScreenModuleCapabilities.screenGeometry",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    248,
+    170
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "vanguard_96_wireless",
+   "name": "VANGUARD 96 WIRELESS",
+   "kind": "keyboard",
+   "html_types": [
+    "KeyboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/vanguard_96_wireless/res/manifests/vanguard_96_wireless_manifest.cuemsf",
+   "sha256": "0f6f3a7141bd18f5f3aa5ebb893b15b893a1508390447f09e747f1e755b42084",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "ScreenModuleCapabilities.screenGeometry",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    248,
+    170
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "vanguard_air_99_wireless",
+   "name": "VANGUARD AIR 99",
+   "kind": "keyboard",
+   "html_types": [
+    "KeyboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/vanguard_air_99_wireless/res/manifests/vanguard_air_99_wireless_manifest.cuemsf",
+   "sha256": "72bada409ef4e9d75ec489ecb9a3d4051b098429421956b497f2e45a17b85080",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "ScreenModuleCapabilities.screenGeometry",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    248,
+    170
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "vanguard_pro_96",
+   "name": "VANGUARD PRO 96",
+   "kind": "keyboard",
+   "html_types": [
+    "KeyboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/vanguard_pro_96/res/manifests/vanguard_pro_96_manifest.cuemsf",
+   "sha256": "163a6a8b9bfface63a3f4d93523e0498464e795ab94bb3bc2104f544456df7dc",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "ScreenModuleCapabilities.screenGeometry",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    248,
+    170
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "vanguard_pro_96_ss",
+   "name": "VANGUARD PRO 96",
+   "kind": "keyboard",
+   "html_types": [
+    "KeyboardLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/vanguard_pro_96_ss/res/manifests/vanguard_pro_96_ss_manifest.cuemsf",
+   "sha256": "bd43edac7151c48a4f80f94394b63f4639f0ce2a102761ede95acb1a4a63506f",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [],
+   "notes": [],
+   "fixed_from": "ScreenModuleCapabilities.screenGeometry",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    248,
+    170
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "cooler_pump_lcd",
+   "name": "Elite LCD",
+   "kind": "pump",
+   "html_types": [
+    "PumpLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/cooler_pump_lcd/res/manifests/cooler_pump_lcd_manifest.cuemsf",
+   "sha256": "51eea761200516674a28e471fae46fac5b0be6c518f8affa83c367d97a8e4bab",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [
+    "Degree0",
+    "Degree90",
+    "Degree180",
+    "Degree270"
+   ],
+   "notes": [],
+   "fixed_from": "WidgetsRects.HardwareWidgetSetup",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    472,
+    472
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "cooler_pump_lcd_v2",
+   "name": "Elite LCD",
+   "kind": "pump",
+   "html_types": [
+    "PumpLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/cooler_pump_lcd_v2/res/manifests/cooler_pump_lcd_v2_manifest.cuemsf",
+   "sha256": "c919315f6b84f6f86dc1cefe9d546e4d086d4fed0f36d7248f7439673e1f1065",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [
+    "Degree0",
+    "Degree90",
+    "Degree180",
+    "Degree270"
+   ],
+   "notes": [],
+   "fixed_from": "WidgetsRects.HardwareWidgetSetup",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    472,
+    472
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "link_cooler_pump_lcd_screen",
+   "name": "iCUE LINK LCD Cap for LINK coolers",
+   "kind": "pump",
+   "html_types": [
+    "PumpLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/link_cooler_pump_lcd_screen/res/manifests/link_cooler_pump_lcd_screen_manifest.cuemsf",
+   "sha256": "c68639dc2d8fc6cc03fed0d4fd4e93bd2fcf10fdc280439d3a09cbc9833fbc31",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [
+    "Degree0",
+    "Degree90",
+    "Degree180",
+    "Degree270"
+   ],
+   "notes": [
+    "WidgetSetup rect is 480x480 (setup page); widgetSizePx uses HardwareWidgetSetup"
+   ],
+   "fixed_from": "WidgetsRects.HardwareWidgetSetup",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    472,
+    472
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "xc7_elite_lcd",
+   "name": "iCUE LINK XC7 ELITE LCD",
+   "kind": "pump",
+   "html_types": [
+    "PumpLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/xc7_elite_lcd/res/manifests/xc7_elite_lcd_manifest.cuemsf",
+   "sha256": "184c1e17b97090614b1fbdac75bf494f39d287401b98aa0cb2086a3226ad6464",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [
+    "Degree0",
+    "Degree90",
+    "Degree180",
+    "Degree270"
+   ],
+   "notes": [],
+   "fixed_from": "WidgetsRects.HardwareWidgetSetup",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    472,
+    472
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "xd_elite_lcd_screen",
+   "name": "iCUE LINK XD ELITE LCD SCREEN",
+   "kind": "pump",
+   "html_types": [
+    "PumpLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/xd_elite_lcd_screen/res/manifests/xd_elite_lcd_screen_manifest.cuemsf",
+   "sha256": "fe6ba54a2d865a7ae49b7c4ec89d791ff4bf3ec23c577036ba127ce6f1a3b226",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [
+    "Degree0",
+    "Degree90",
+    "Degree180",
+    "Degree270"
+   ],
+   "notes": [],
+   "fixed_from": "WidgetsRects.HardwareWidgetSetup",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    472,
+    472
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "nautilus_lcd_cap",
+   "name": "NAUTILUS LCD CAP",
+   "kind": "pump",
+   "html_types": [
+    "PumpLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/nautilus_lcd_cap/res/manifests/nautilus_lcd_cap_manifest.cuemsf",
+   "sha256": "5a604baf8c560138fa44dca84ed5d15cf1921fb56ce0283067725498775308c0",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [
+    "Degree0",
+    "Degree90",
+    "Degree180",
+    "Degree270"
+   ],
+   "notes": [],
+   "fixed_from": "WidgetsRects.HardwareWidgetSetup",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    472,
+    472
+   ],
+   "sizes": {},
+   "grid": {}
+  },
+  {
+   "id": "nautilus_lcd_cap_v2",
+   "name": "NAUTILUS LCD CAP",
+   "kind": "pump",
+   "html_types": [
+    "PumpLCD"
+   ],
+   "source": "Application/src/mod/devices/manifests/nautilus_lcd_cap_v2/res/manifests/nautilus_lcd_cap_v2_manifest.cuemsf",
+   "sha256": "b6795974028d0a6070f49baaa066328161ca2d113b344260587cb9e63b092cf9",
+   "auto_rotation": null,
+   "initial_orientation": "",
+   "rotations": [
+    "Degree0",
+    "Degree90",
+    "Degree180",
+    "Degree270"
+   ],
+   "notes": [],
+   "fixed_from": "WidgetsRects.HardwareWidgetSetup",
+   "touch_setup": false,
+   "mimic": [
+    0,
+    0
+   ],
+   "physical": [
+    0,
+    0
+   ],
+   "fixed": [
+    472,
+    472
+   ],
+   "sizes": {},
+   "grid": {}
+  }
+ ],
+ "skipped": [
+  {
+   "id": "link_cooler_pump_lcd",
+   "source": "Application/src/mod/devices/manifests/link_cooler_pump_lcd/res/manifests/link_cooler_pump_lcd_manifest.cuemsf",
+   "reason": "widget device without a size source in the manifest (iCUE would read the hardware property LCDScreenSize or fall back to 480x480)"
+  },
+  {
+   "id": "xd_elite_lcd",
+   "source": "Application/src/mod/devices/manifests/xd_elite_lcd/res/manifests/xd_elite_lcd_manifest.cuemsf",
+   "reason": "widget device without a size source in the manifest (iCUE would read the hardware property LCDScreenSize or fall back to 480x480)"
+  }
+ ]
+}

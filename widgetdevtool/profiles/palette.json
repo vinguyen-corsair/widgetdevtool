@@ -1,0 +1,46 @@
+{
+ "version": 1,
+ "source": "Application/src/qml/com/corsair/cue/cuestyle/src/CuePalette.cpp",
+ "sha256": "0711c7c0ce230d453d127d012b4c94abe1814239ea38dde3ad0642b69abc2fdb",
+ "colors": {
+  "accent1": "#ece81a",
+  "accent2": "#ff3d41",
+  "accent3": "#f08e33",
+  "accent4": "#9a3ed0",
+  "accent5": "#5ddd32",
+  "accent6": "#3bb1ff",
+  "accent7": "#785aff",
+  "accent8": "#fac800",
+  "accent9": "#1ecfdf",
+  "blue": "#3c4bff",
+  "hover1": "#ffffff",
+  "hover2": "#000000",
+  "hover3": "#000000",
+  "hover4": "#ffffff",
+  "layer1": "#000000",
+  "layer2": "#0b0b0b",
+  "layer3": "#131313",
+  "layer4": "#1f1f1f",
+  "layer5": "#2b2b2b",
+  "layer6": "#4b4b4b",
+  "layer7": "#808080",
+  "layer8": "#c0c0c0",
+  "layer9": "#ffffff",
+  "lightAccent1": "#e82f33",
+  "lightAccent2": "#f5ab00",
+  "lightAccent3": "#3db116",
+  "lightAccent4": "#00aaff",
+  "lightAccent5": "#ff453a"
+ },
+ "hover_opacity": {
+  "hover1": 0.1,
+  "hover2": 0.1,
+  "hover3": 0.18,
+  "hover4": 0.32
+ },
+ "default_icon": {
+  "url": "qrc:///cue-icons/4.0/screeneffects/web-url.svg",
+  "source": "Application/src/qml/com/corsair/cue/cuestyle/icons/screeneffects/web-url.svg",
+  "sha256": "6e43580a51f34de984eac7d1dbe685593d59ffe07e9d89e1d2a386bc46af5675"
+ }
+}

@@ -1,0 +1,39 @@
+
+	if (!window.plugins.%1) {
+		window.plugins.%1 = {};
+	}
+	let %1Init = function() {
+		if (plugin%1_initialized) {
+			return;
+		}
+		if (channel.objects.%1) {
+			window.plugins.%1 = channel.objects.%1;
+		}
+
+		if (window.plugins.%1) {
+			if (typeof window.plugins.%1._realDevice === 'function') {
+				window.plugins.%1._realDevice(!channel.objects.SCRIPT_WEBCHANNEL_ID.isPreview);
+
+				channel.objects.SCRIPT_WEBCHANNEL_ID.isPreviewChanged.connect(function() {
+					window.plugins.%1._realDevice(!channel.objects.SCRIPT_WEBCHANNEL_ID.isPreview);
+				});
+			}
+
+			console.log("HtmlDataProvider: Setting permissions model for plugin %1", typeof window.plugins.%1._setPermissionsModel);
+			console.log("HtmlDataProvider: permissionsModel=" + channel.objects.SCRIPT_WEBCHANNEL_ID.permissionsController);
+			if (typeof window.plugins.%1._setPermissionsModel === 'function' && channel.objects.SCRIPT_WEBCHANNEL_ID.permissionsController) {
+				window.plugins.%1._setPermissionsModel(channel.objects.SCRIPT_WEBCHANNEL_ID.permissionsController);
+			}
+		}
+
+		plugin%1_initialized = true;
+
+		if (typeof plugin%1Events.onInitialized === 'function') {
+			console.log("HtmlDataProvider: Plugin %1 initialized");
+			plugin%1Events.onInitialized();
+		}
+	};
+
+	_initFuncs["%1"] = () => %1Init();
+	%1Init();
+	

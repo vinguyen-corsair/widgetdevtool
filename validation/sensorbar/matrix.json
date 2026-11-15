@@ -1,0 +1,2102 @@
+[
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+467
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+19
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "1",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "1",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0
+],
+"placeholders": 0,
+"bars": 1
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+548,
+609
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+19,
+19
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "2",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "2",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0
+],
+"placeholders": 0,
+"bars": 2
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+39,
+39
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+39,
+39
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+631,
+595,
+675,
+675
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+40,
+19,
+104,
+104
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "4",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "4",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 4
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+37,
+16,
+73,
+73,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+37,
+16,
+73,
+73,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+673,
+642,
+709,
+709,
+637
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+19,
+19,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+16,
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+108,
+64,
+160,
+160,
+89
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "5",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+16,
+16,
+16,
+16
+],
+"placeholders": 0,
+"bars": 0
+},
+{
+"sensors": "5",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0,
+0,
+0
+],
+"placeholders": 0,
+"bars": 5
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+229,
+229
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+229,
+229
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+606,
+865,
+865
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeXL",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+175,
+175
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "dash_accessory_lcd",
+"size": "SizeM",
+"orient": "portrait",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+148,
+148
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "link_generic_lcd",
+"size": "SizeS",
+"orient": "landscape",
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+19,
+366,
+366
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "cooler_pump_lcd",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+},
+{
+"sensors": "disc",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": true,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": false,
+"rowBg": false,
+"leader_px": [
+16,
+162,
+162
+],
+"placeholders": 2,
+"bars": 0
+},
+{
+"sensors": "disc",
+"device": "vanguard_96",
+"size": null,
+"orient": null,
+"showBar": true,
+"rowBg": false,
+"leader_px": [
+0,
+0,
+0
+],
+"placeholders": 2,
+"bars": 3
+}
+]

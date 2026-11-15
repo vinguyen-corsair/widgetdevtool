@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tr('RSS Feed Reader')</title>
+  <link rel="icon" type="image/svg+xml" href="resources/rssfeedreader.svg">
+
+  <!-- MediaViewer for background image support -->
+  <!-- MediaViewer CSS (inlined for packaging) -->
+  <style>
+    .position-container { position: absolute; transform-origin: top left; }
+    .scale-container { transform-origin: top left; }
+    .rotation-container { transform-origin: center center; }
+    .rotation-container img, .rotation-container video { display: block; object-fit: contain; }
+  </style>
+  <!-- MediaViewer JS (inlined for packaging) -->
+  <script>
+    class MediaViewer {
+      constructor(options = {}) {
+        this.container = options.container;
+        this.onMediaLoaded = options.onMediaLoaded || (() => {});
+        this.onMediaError = options.onMediaError || (() => {});
+        this.debug = options.debug || false;
+        this.positionContainer = null;
+        this.scaleContainer = null;
+        this.rotationContainer = null;
+        this.mediaElement = null;
+        this.currentMediaPath = null;
+        this.supportedImageFormats = ["jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", "ico"];
+        this.supportedVideoFormats = ["mp4", "webm", "ogg", "mov", "avi", "mkv"];
+        if (!this.container) {
+          throw new Error("MediaViewer: container is required");
+        }
+      }
+
+      getFileExtension(filePath) {
+        return filePath.split(".").pop().toLowerCase();
+      }
+
+      isImageFile(ext) {
+        return this.supportedImageFormats.includes(ext);
+      }
+
+      isVideoFile(ext) {
+        return this.supportedVideoFormats.includes(ext);
+      }
+
+      log(...args) {
+        if (this.debug) console.log("[MediaViewer]", ...args);
+      }
+
+      warn(...args) {
+        if (this.debug) console.warn("[MediaViewer]", ...args);
+      }
+
+      error(...args) {
+        console.error("[MediaViewer]", ...args);
+      }
+
+      createImageElement(filePath) {
+        const img = document.createElement("img");
+        img.src = filePath;
+        img.onerror = () => {
+          this.error("Failed to load image:", filePath);
+          this.onMediaError(new Error("Failed to load image: " + filePath));
+        };
+        img.onload = () => {
+          this.log("Image loaded:", filePath);
+          this.onMediaLoaded(img);
+        };
+        return img;
+      }
+
+      createVideoElement(filePath) {
+        const video = document.createElement("video");
+        video.controls = false;
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.addEventListener("loadedmetadata", () => {
+          this.log("Video metadata loaded:", filePath);
+        });
+        video.addEventListener("loadeddata", () => {
+          video.play().then(() => {
+            this.log("Video playing");
+            this.onMediaLoaded(video);
+          }).catch((error) => {
+            this.error("Error playing video:", error);
+            this.onMediaError(error);
+          });
+        });
+        video.addEventListener("error", () => {
+          this.onMediaError(new Error("Video error: " + (video.error?.message || "Unknown error")));
+        });
+        video.src = filePath;
+        return video;
+      }
+
+      createMediaElement(filePath) {
+        const ext = this.getFileExtension(filePath);
+        if (this.isImageFile(ext)) return this.createImageElement(filePath);
+        if (this.isVideoFile(ext)) return this.createVideoElement(filePath);
+        this.error("Unsupported media format:", ext);
+        this.onMediaError(new Error("Unsupported media format: " + ext));
+        return null;
+      }
+
+      createContainers() {
+        this.positionContainer = document.createElement("div");
+        this.positionContainer.className = "position-container";
+        this.scaleContainer = document.createElement("div");
+        this.scaleContainer.className = "scale-container";
+        this.rotationContainer = document.createElement("div");
+        this.rotationContainer.className = "rotation-container";
+        this.rotationContainer.appendChild(this.mediaElement);
+        this.scaleContainer.appendChild(this.rotationContainer);
+        this.positionContainer.appendChild(this.scaleContainer);
+        return this.positionContainer;
+      }
+
+      applyTransform(params = {}) {
+        if (!this.positionContainer || !this.scaleContainer || !this.rotationContainer) {
+          this.warn("Containers not initialized");
+          return;
+        }
+        const baseWidth = params.baseWidth || 100;
+        const baseHeight = params.baseHeight || 100;
+        const scaleValue = params.scale !== undefined ? params.scale : 1;
+        const posX = params.positionX || 0;
+        const posY = params.positionY || 0;
+        const rotation = params.angle || 0;
+        const containerWidth = this.container.clientWidth;
+        const containerHeight = this.container.clientHeight;
+        const scaleX = containerWidth / baseWidth;
+        const scaleY = containerHeight / baseHeight;
+        const minScale = Math.min(scaleX, scaleY);
+
+        this.positionContainer.style.transform = "translate(" + (posX * minScale) + "px, " + (posY * minScale) + "px)";
+        this.scaleContainer.style.transform = "scale(" + (scaleValue * minScale) + ")";
+        this.rotationContainer.style.transform = "rotate(" + rotation + "deg)";
+      }
+
+      loadMedia(params = {}) {
+        const filePath = params.path;
+        if (!filePath) {
+          this.clear();
+          return;
+        }
+
+        const decodedPath = decodeURIComponent(filePath);
+        if (this.currentMediaPath === decodedPath) {
+          this.applyTransform(params);
+          return;
+        }
+
+        this.clear();
+        this.mediaElement = this.createMediaElement(decodedPath);
+        if (!this.mediaElement) return;
+
+        const containerTree = this.createContainers();
+        this.container.appendChild(containerTree);
+        this.container.style.visibility = "visible";
+        this.applyTransform(params);
+        this.currentMediaPath = decodedPath;
+      }
+
+      clear() {
+        this.container.innerHTML = "";
+        this.container.style.visibility = "hidden";
+        this.positionContainer = null;
+        this.scaleContainer = null;
+        this.rotationContainer = null;
+        this.mediaElement = null;
+        this.currentMediaPath = null;
+      }
+
+      destroy() {
+        this.clear();
+        this.container = null;
+        this.onMediaLoaded = null;
+        this.onMediaError = null;
+      }
+    }
+  </script>
+
+  <meta name="x-icue-restrictions"
+        data-restrictions='[
+          { "device": "dashboard_lcd" }
+        ]'>
+
+  <meta name="x-icue-interactive">
+
+  <!-- RSS Feed Settings -->
+  <meta name="x-icue-property" content="feedUrl1" data-label="tr('Feed URL 1')" data-type="textfield" data-default="'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'">
+  <meta name="x-icue-property" content="feedUrl2" data-label="tr('Feed URL 2')" data-type="textfield" data-default="'https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&amp;id=100727362'">
+  <meta name="x-icue-property" content="feedUrl3" data-label="tr('Feed URL 3')" data-type="textfield" data-default="'https://www.wired.com/feed/rss'">
+  <meta name="x-icue-property" content="feedUrl4" data-label="tr('Feed URL 4')" data-type="textfield" data-default="''">
+  <meta name="x-icue-property" content="feedUrl5" data-label="tr('Feed URL 5')" data-type="textfield" data-default="''">
+  <meta name="x-icue-property" content="refreshMinutes" data-label="tr('Refresh Interval (Minutes)')" data-type="slider" data-default="10" data-min="1" data-max="60" data-step="1" data-unit-label="'min'">
+
+  <!-- Widget Personalization (MUST BE LAST GROUP) -->
+  <meta name="x-icue-property" content="textColor" data-label="tr('Text Color')" data-type="color" data-default="'#F6F8FF'">
+  <meta name="x-icue-property" content="backgroundColor" data-label="tr('Background')" data-type="color" data-default="'#071019'">
+  <meta name="x-icue-property" content="backgroundMedia" data-label="tr('Background Image')" data-type="media-selector" data-filters="['*.png','*.jpg','*.jpeg','*.webp']">
+  <meta name="x-icue-property" content="bgBrightness" data-label="tr('Background Brightness')" data-type="slider" data-default="100" data-min="10" data-max="150" data-step="5">
+  <meta name="x-icue-property" content="glassBlur" data-label="tr('Glass Blur')" data-type="slider" data-default="0" data-min="0" data-max="30" data-step="1">
+  <meta name="x-icue-property" content="transparency" data-label="tr('Background Transparency')" data-type="slider" data-default="92" data-min="0" data-max="100" data-step="1">
+  <meta name="x-icue-property" content="fontFamily" data-label="tr('Font')" data-type="textfield" data-default="''">
+  <meta name="x-icue-property" content="accentColor1" data-label="tr('Accent Color 1')" data-type="color" data-default="'#5B8CFF'">
+  <meta name="x-icue-property" content="accentColor2" data-label="tr('Accent Color 2')" data-type="color" data-default="'#26B67A'">
+  <meta name="x-icue-property" content="accentColor3" data-label="tr('Accent Color 3')" data-type="color" data-default="'#E7A94B'">
+  <meta name="x-icue-property" content="accentColor4" data-label="tr('Accent Color 4')" data-type="color" data-default="'#F06E63'">
+  <meta name="x-icue-property" content="accentColor5" data-label="tr('Accent Color 5')" data-type="color" data-default="'#7C7BFF'">
+
+  <script id="x-icue-groups" type="application/json">
+  [
+    {
+      "title": "tr('RSS Feeds')",
+      "properties": [
+        "feedUrl1",
+        "feedUrl2",
+        "feedUrl3",
+        "feedUrl4",
+        "feedUrl5",
+        "refreshMinutes"
+      ]
+    },
+    {
+      "title": "tr('Widget Personalization')",
+      "properties": [
+        "textColor",
+        "backgroundColor",
+        "backgroundMedia",
+        "bgBrightness",
+        "glassBlur",
+        "transparency",
+        "fontFamily",
+        "accentColor1",
+        "accentColor2",
+        "accentColor3",
+        "accentColor4",
+        "accentColor5"
+      ]
+    }
+  ]
+  </script>
+
+  <link rel="stylesheet" type="text/css" href="styles/rssfeedreader.css">
+</head>
+<body>
+  <div class="widget-root" id="widgetRoot">
+    <div class="widget-background" aria-hidden="true">
+      <div class="main-glass"></div>
+      <div id="media-background"></div>
+    </div>
+
+    <main class="main-content">
+      <header class="viewer-header">
+        <div class="feed-tabs" id="feedTabs" role="tablist" aria-label="RSS feeds"></div>
+      </header>
+
+      <section class="viewer-stage">
+        <button type="button" class="story-preview hidden" id="storyPreview">
+          <div class="story-preview-media">
+            <img class="story-preview-image hidden" id="previewImage" alt="" />
+          </div>
+          <div class="story-preview-overlay"></div>
+          <div class="story-preview-body">
+            <div class="story-preview-topline">
+              <span class="story-preview-label">selected story</span>
+              <span class="story-preview-action" id="previewAction">open article</span>
+            </div>
+            <h2 class="story-preview-title" id="previewTitle"></h2>
+            <p class="story-preview-summary" id="previewSummary"></p>
+            <div class="story-preview-meta">
+              <span class="story-preview-published" id="previewPublished"></span>
+              <span class="story-preview-source" id="previewSource"></span>
+            </div>
+          </div>
+        </button>
+
+        <section class="story-rail">
+          <div class="feed-list" id="feedList"></div>
+        </section>
+      </section>
+    </main>
+
+    <div class="toast hidden" id="toast">
+      <span class="toast-text" id="toastText"></span>
+    </div>
+  </div>
+
+  <script>
+    icueEvents = {
+      "onDataUpdated": onIcueDataUpdated,
+      "onICUEInitialized": onIcueInitialized
+    };
+
+    const MAX_FEEDS = 5;
+    const DEFAULT_FONT = "'Segoe UI Variable', 'Segoe UI', sans-serif";
+    const DEFAULTS = {
+      feedUrl1: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml",
+      feedUrl2: "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100727362",
+      feedUrl3: "https://www.wired.com/feed/rss",
+      feedUrl4: "",
+      feedUrl5: "",
+      refreshMinutes: 10,
+      textColor: "#F6F8FF",
+      backgroundColor: "#071019",
+      transparency: 92,
+      glassBlur: 0,
+      bgBrightness: 100,
+      accentColor1: "#5B8CFF",
+      accentColor2: "#26B67A",
+      accentColor3: "#E7A94B",
+      accentColor4: "#F06E63",
+      accentColor5: "#7C7BFF"
+    };
+    const LEGACY_DEFAULT_FEEDS = {
+      feedUrl1: {
+        "https://feeds.npr.org/1004/rss.xml": DEFAULTS.feedUrl1
+      },
+      feedUrl2: {
+        "https://www.pcmag.com/feeds/rss/latest": DEFAULTS.feedUrl2,
+        "https://www.reddit.com/r/corsair/.rss": DEFAULTS.feedUrl2
+      },
+      feedUrl3: {
+        "https://variety.com/feed/": DEFAULTS.feedUrl3
+      }
+    };
+    const FEED_CACHE_STORAGE_KEY = "rssFeedReaderCache";
+    const FEED_CACHE_VERSION = 2;
+    const LEGACY_FEED_CACHE_VERSION = 1;
+    const WIDGET_STORAGE_KEY = typeof uniqueId !== "undefined" && uniqueId ? uniqueId : "rssfeedreader-dev";
+    const FEED_LOAD_ERROR_STATUS = "error:Unable to load feed. Check URL, feed limits, or network.";
+    const ACTIVE_REFRESH_JITTER_WINDOW_MS = 90 * 1000;
+    const FEED_FETCH_STAGGER_MS = 1500;
+    const MAX_FAILURE_BACKOFF_MS = 60 * 60 * 1000;
+    const FEED_FETCH_TIMEOUT_MS = 9000;
+
+    // Keep the feed path intentionally short: fewer public relays means fewer provider-specific failure modes.
+    const DIRECT_FETCH_SOURCE = { fn: (url) => url, unwrap: null };
+    const CORS_PROXIES = [
+      { fn: (url) => "https://api.allorigins.win/get?url=" + encodeURIComponent(url), unwrap: "allorigins" }
+    ];
+
+    let refreshTimer = null;
+    let feedEntries = [];
+    let feedTitles = {};
+    let feedStatus = {};
+    let activeFeed = 1;
+    let lastFeedKey = "";
+    let lastFeedValues = [];
+    let isLoading = false;
+    let layoutMode = getLayoutMode();
+    let previewLinkUrl = "";
+    let resizeDebounce = null;
+    let toastTimer = null;
+    let pendingReload = false;
+    let selectedStoryKeyByFeed = {};
+    let feedFetchStateByFeed = {};
+
+    const widgetRootEl = document.getElementById("widgetRoot");
+    const feedTabsEl = document.getElementById("feedTabs");
+    const feedListEl = document.getElementById("feedList");
+    const storyPreviewEl = document.getElementById("storyPreview");
+    const previewImageEl = document.getElementById("previewImage");
+    const previewTitleEl = document.getElementById("previewTitle");
+    const previewSummaryEl = document.getElementById("previewSummary");
+    const previewPublishedEl = document.getElementById("previewPublished");
+    const previewSourceEl = document.getElementById("previewSource");
+    const toastEl = document.getElementById("toast");
+    const toastTextEl = document.getElementById("toastText");
+    const mediaBackgroundEl = document.getElementById("media-background");
+    const mediaBackgroundComponent = createMediaBackgroundComponent(mediaBackgroundEl);
+
+    storyPreviewEl.addEventListener("click", () => {
+      if (previewLinkUrl) openStoryLink(previewLinkUrl);
+    });
+
+    previewImageEl.addEventListener("error", () => {
+      previewImageEl.classList.add("hidden");
+      storyPreviewEl.classList.remove("has-image");
+    });
+
+    function getLayoutMode() {
+      return Math.max(window.innerWidth, window.innerHeight) >= 1600 ? "expanded" : "compact";
+    }
+
+    function applyLayoutMode() {
+      const nextMode = getLayoutMode();
+      widgetRootEl.classList.toggle("is-expanded", nextMode === "expanded");
+      if (nextMode === layoutMode) return;
+      layoutMode = nextMode;
+      rerenderCurrentFeedForLayout();
+    }
+
+    applyLayoutMode();
+
+    function getIcueProperty(name, fallback, options = {}) {
+      const allowEmpty = Boolean(options.allowEmpty);
+      if (typeof window !== "undefined" && Object.prototype.hasOwnProperty.call(window, name)) {
+        const value = window[name];
+        if (value !== undefined && value !== null && (allowEmpty || value !== "")) return value;
+      }
+      try {
+        const value = Function("return typeof " + name + " !== 'undefined' ? " + name + " : undefined")();
+        if (value !== undefined && value !== null && (allowEmpty || value !== "")) return value;
+      } catch (error) {
+        void error;
+      }
+      return fallback;
+    }
+
+    function clampInt(value, min, max, fallback) {
+      const nextValue = Number(value);
+      if (!Number.isFinite(nextValue)) return fallback;
+      return Math.min(Math.max(Math.round(nextValue), min), max);
+    }
+
+    function resolveMediaPath(value) {
+      if (!value) return "";
+      if (typeof value === "string") return value;
+      if (value.pathToAsset) return value.pathToAsset;
+      if (value.path) return value.path;
+      return "";
+    }
+
+    function normalizeMediaConfig(rawMedia) {
+      const mediaPath = resolveMediaPath(rawMedia);
+      if (!mediaPath) return null;
+      const base = rawMedia && typeof rawMedia === "object" ? rawMedia : {};
+      const scaleValue = Number(base.scale);
+      return {
+        path: base.pathToAsset || mediaPath,
+        baseWidth: Number(base.baseWidth) || Number(base.baseSizeX) || 0,
+        baseHeight: Number(base.baseHeight) || Number(base.baseSizeY) || 0,
+        scale: Number.isFinite(scaleValue) ? scaleValue : 1,
+        positionX: Number(base.positionX) || 0,
+        positionY: Number(base.positionY) || 0,
+        angle: Number(base.angle) || 0
+      };
+    }
+
+    function getAccentColor(feedIndex) {
+      const key = "accentColor" + feedIndex;
+      const fallbackMap = {
+        1: DEFAULTS.accentColor1,
+        2: DEFAULTS.accentColor2,
+        3: DEFAULTS.accentColor3,
+        4: DEFAULTS.accentColor4,
+        5: DEFAULTS.accentColor5
+      };
+      return getIcueProperty(key, fallbackMap[feedIndex] || DEFAULTS.accentColor1);
+    }
+
+    function getConfiguredFeedUrl(key) {
+      const url = String(getIcueProperty(key, DEFAULTS[key], { allowEmpty: true }) || "").trim();
+      const migratedUrl = LEGACY_DEFAULT_FEEDS[key] && LEGACY_DEFAULT_FEEDS[key][url];
+      return migratedUrl || url;
+    }
+
+    function getConfiguredFeed(feedIndex) {
+      return getFeedUrlsWithIndex().find((feed) => feed.index === feedIndex) || null;
+    }
+
+    function readWidgetStorage() {
+      if (typeof localStorage === "undefined") return {};
+      try {
+        const stored = localStorage.getItem(WIDGET_STORAGE_KEY);
+        if (!stored) return {};
+        const parsed = JSON.parse(stored);
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch (error) {
+        console.warn("Unable to read widget cache:", error);
+        return {};
+      }
+    }
+
+    function writeWidgetStorage(data) {
+      if (typeof localStorage === "undefined") return;
+      try {
+        localStorage.setItem(WIDGET_STORAGE_KEY, JSON.stringify(data));
+      } catch (error) {
+        console.warn("Unable to write widget cache:", error);
+      }
+    }
+
+    function getRefreshIntervalMs() {
+      const minutes = clampInt(getIcueProperty("refreshMinutes", DEFAULTS.refreshMinutes), 1, 60, DEFAULTS.refreshMinutes);
+      return minutes * 60 * 1000;
+    }
+
+    function sanitizeFeedFetchState(rawState, fallbackFetchedAt = 0) {
+      const nextState = rawState && typeof rawState === "object" ? rawState : {};
+      return {
+        lastFetchedAt: Math.max(0, Number(nextState.lastFetchedAt) || Number(fallbackFetchedAt) || 0),
+        lastAttemptedAt: Math.max(0, Number(nextState.lastAttemptedAt) || 0),
+        failureCount: Math.max(0, Number(nextState.failureCount) || 0),
+        nextRetryAt: Math.max(0, Number(nextState.nextRetryAt) || 0)
+      };
+    }
+
+    function getPersistedFeedFetchStates(fallbackFetchedAt = 0) {
+      const nextStates = {};
+      getFeedUrlsWithIndex().forEach((feed) => {
+        nextStates[feed.index] = sanitizeFeedFetchState(feedFetchStateByFeed[feed.index], fallbackFetchedAt);
+      });
+      return nextStates;
+    }
+
+    function hasPersistableFeedState() {
+      return feedEntries.length > 0 || Object.values(feedFetchStateByFeed).some((state) => {
+        const nextState = sanitizeFeedFetchState(state);
+        return nextState.lastFetchedAt > 0 || nextState.nextRetryAt > Date.now();
+      });
+    }
+
+    function clearPersistedFeedCache() {
+      const widgetStorage = readWidgetStorage();
+      if (!Object.prototype.hasOwnProperty.call(widgetStorage, FEED_CACHE_STORAGE_KEY)) return;
+      delete widgetStorage[FEED_CACHE_STORAGE_KEY];
+      writeWidgetStorage(widgetStorage);
+    }
+
+    function persistFeedCache(feedKey) {
+      const widgetStorage = readWidgetStorage();
+      widgetStorage[FEED_CACHE_STORAGE_KEY] = {
+        version: FEED_CACHE_VERSION,
+        feedKey,
+        feedEntries,
+        feedTitles,
+        feedStatus,
+        selectedStoryKeyByFeed,
+        feedFetchStateByFeed: getPersistedFeedFetchStates()
+      };
+      writeWidgetStorage(widgetStorage);
+    }
+
+    function restorePersistedFeedCache(feedKey) {
+      const widgetStorage = readWidgetStorage();
+      const cache = widgetStorage[FEED_CACHE_STORAGE_KEY];
+      if (!cache || (cache.version !== FEED_CACHE_VERSION && cache.version !== LEGACY_FEED_CACHE_VERSION) || cache.feedKey !== feedKey) {
+        return { restored: false };
+      }
+
+      const cachedEntries = Array.isArray(cache.feedEntries) ? cache.feedEntries : [];
+      const persistedFetchStates = cache.feedFetchStateByFeed && typeof cache.feedFetchStateByFeed === "object"
+        ? cache.feedFetchStateByFeed
+        : {};
+      const fallbackFetchedAt = cache.version === LEGACY_FEED_CACHE_VERSION ? (Number(cache.fetchedAt) || 0) : 0;
+
+      feedEntries = cachedEntries;
+      feedTitles = cache.feedTitles && typeof cache.feedTitles === "object" ? cache.feedTitles : {};
+      feedStatus = cache.feedStatus && typeof cache.feedStatus === "object" ? cache.feedStatus : {};
+      selectedStoryKeyByFeed = cache.selectedStoryKeyByFeed && typeof cache.selectedStoryKeyByFeed === "object"
+        ? cache.selectedStoryKeyByFeed
+        : {};
+      feedFetchStateByFeed = {};
+      getFeedUrlsWithIndex().forEach((feed) => {
+        feedFetchStateByFeed[feed.index] = sanitizeFeedFetchState(persistedFetchStates[feed.index], fallbackFetchedAt);
+        if (!feedStatus[feed.index] && feedFetchStateByFeed[feed.index].lastFetchedAt > 0) {
+          feedStatus[feed.index] = "loaded";
+        }
+      });
+
+      const hasRestoredContent = cachedEntries.length > 0 || Object.values(feedFetchStateByFeed).some((state) => {
+        return state.lastFetchedAt > 0 || state.nextRetryAt > Date.now();
+      });
+      if (!hasRestoredContent) {
+        return { restored: false };
+      }
+
+      renderFeedTabs();
+      renderActiveFeed();
+      return { restored: true };
+    }
+
+    function syncPersistedFeedCache(feedKey) {
+      if (hasPersistableFeedState()) {
+        persistFeedCache(feedKey);
+      } else {
+        clearPersistedFeedCache();
+      }
+    }
+
+    function createMediaBackgroundComponent(container) {
+      if (!container) {
+        return { clear() {}, loadMedia() {} };
+      }
+
+      if (typeof MediaViewer === "function") {
+        const viewer = new MediaViewer({
+          container,
+          onMediaLoaded() {
+            container.classList.add("has-media");
+          },
+          onMediaError(error) {
+            container.classList.remove("has-media");
+            console.error("Media background error:", error);
+          }
+        });
+
+        return {
+          clear() {
+            viewer.clear();
+            container.classList.remove("has-media");
+          },
+          loadMedia(config) {
+            viewer.loadMedia(config);
+          }
+        };
+      }
+
+      console.warn("MediaViewer is unavailable; using static background fallback.");
+      return {
+        clear() {
+          container.style.backgroundImage = "";
+          container.style.visibility = "hidden";
+          container.classList.remove("has-media");
+        },
+        loadMedia(config) {
+          const assetPath = config ? (config.path || resolveMediaPath(config)) : "";
+          if (!assetPath) {
+            container.style.backgroundImage = "";
+            container.style.visibility = "hidden";
+            container.classList.remove("has-media");
+            return;
+          }
+          const safeAssetPath = String(assetPath).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+          container.style.backgroundImage = "url('" + safeAssetPath + "')";
+          container.style.backgroundRepeat = "no-repeat";
+          container.style.backgroundPosition = "center";
+          container.style.backgroundSize = "cover";
+          container.style.visibility = "visible";
+          container.classList.add("has-media");
+        }
+      };
+    }
+
+    function applyStyles() {
+      const root = document.documentElement;
+      const bgTransparency = clampInt(getIcueProperty("transparency", DEFAULTS.transparency), 0, 100, DEFAULTS.transparency) / 100;
+      const blur = Number(getIcueProperty("glassBlur", DEFAULTS.glassBlur));
+      const brightness = Number(getIcueProperty("bgBrightness", DEFAULTS.bgBrightness));
+      const customFont = String(getIcueProperty("fontFamily", "") || "").trim();
+
+      root.style.setProperty("--bg-opacity", bgTransparency);
+      root.style.setProperty("--text-color", getIcueProperty("textColor", DEFAULTS.textColor));
+      root.style.setProperty("--bg-color", getIcueProperty("backgroundColor", DEFAULTS.backgroundColor));
+      root.style.setProperty("--bg-blur", (Number.isFinite(blur) ? blur : 0) + "px");
+      root.style.setProperty("--bg-brightness", (Number.isFinite(brightness) ? brightness : 100) + "%");
+      root.style.setProperty("--widget-font", customFont ? customFont + ", " + DEFAULT_FONT : DEFAULT_FONT);
+
+      renderFeedTabs();
+
+      const bgMedia = getIcueProperty("backgroundMedia", undefined);
+      const mediaConfig = normalizeMediaConfig(bgMedia);
+      if (!mediaConfig) {
+        mediaBackgroundComponent.clear();
+        return;
+      }
+
+      mediaBackgroundComponent.loadMedia(mediaConfig);
+    }
+
+    function localize(key) {
+      if (typeof tr === "function") {
+        try {
+          return Promise.resolve(tr(key)).catch(() => key);
+        } catch (error) {
+          void error;
+        }
+      }
+      return key;
+    }
+
+    function setTextContent(element, value) {
+      if (!element) return;
+      element.dataset.localizeKey = "";
+      element.textContent = value || "";
+    }
+
+    function setLocalizedText(element, key) {
+      if (!element) return;
+      if (!key) {
+        element.dataset.localizeKey = "";
+        element.textContent = "";
+        return;
+      }
+      const localizationKey = String(key);
+      element.dataset.localizeKey = localizationKey;
+      element.textContent = localizationKey;
+      const localized = localize(key);
+      if (localized && typeof localized.then === "function") {
+        localized.then((text) => {
+          if (element.dataset.localizeKey === localizationKey) {
+            element.textContent = text || localizationKey;
+          }
+        });
+        return;
+      }
+      element.textContent = localized || localizationKey;
+    }
+
+    function decodeHtml(htmlText) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(String(htmlText || ""), "text/html");
+      return (doc.body.textContent || "").trim();
+    }
+
+    function formatDate(pubDateText) {
+      if (!pubDateText) return "";
+      const date = new Date(pubDateText);
+      if (Number.isNaN(date.getTime())) return "";
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMinutes = Math.floor(diffMs / 60000);
+      if (diffMinutes < 1) return "just now";
+      if (diffMinutes < 60) return diffMinutes + "m ago";
+      const diffHours = Math.floor(diffMinutes / 60);
+      if (diffHours < 24) return diffHours + "h ago";
+      const diffDays = Math.floor(diffHours / 24);
+      return diffDays + "d ago";
+    }
+
+    function isSafeUrl(url) {
+      try {
+        const parsed = new URL(url);
+        return parsed.protocol === "https:";
+      } catch (error) {
+        void error;
+        return false;
+      }
+    }
+
+    function upgradeToHttps(url) {
+      if (typeof url === "string" && url.startsWith("http://")) {
+        return "https://" + url.substring(7);
+      }
+      return url;
+    }
+
+    function extractImage(itemNode) {
+      const candidates = Array.from(itemNode.querySelectorAll("[url]"));
+      for (const element of candidates) {
+        const url = upgradeToHttps((element.getAttribute("url") || "").trim());
+        if (!url || !isSafeUrl(url)) continue;
+        const tag = element.localName.toLowerCase();
+        const type = (element.getAttribute("type") || "").toLowerCase();
+        const medium = (element.getAttribute("medium") || "").toLowerCase();
+
+        if (tag === "thumbnail") return url;
+        if (tag === "content" && (type.startsWith("image/") || medium === "image" || /\.(jpe?g|png|gif|webp)(\?|$)/i.test(url))) {
+          return url;
+        }
+        if (tag === "enclosure" && type.startsWith("image/")) return url;
+      }
+      return null;
+    }
+
+    function getFeedUrlsWithIndex() {
+      const feeds = [];
+      for (let index = 1; index <= MAX_FEEDS; index += 1) {
+        const key = "feedUrl" + index;
+        const url = getConfiguredFeedUrl(key);
+        if (url.length > 0 && isSafeUrl(url)) {
+          feeds.push({ index, url });
+        }
+      }
+      return feeds;
+    }
+
+    function getFeedValues() {
+      const values = [];
+      for (let index = 1; index <= MAX_FEEDS; index += 1) {
+        const key = "feedUrl" + index;
+        values.push(getConfiguredFeedUrl(key));
+      }
+      return values;
+    }
+
+    function computeFeedKey() {
+      return getFeedValues().join("|");
+    }
+
+    function getChangedFeedIndexes(nextFeedValues) {
+      const changed = [];
+      for (let index = 0; index < MAX_FEEDS; index += 1) {
+        if ((lastFeedValues[index] || "") !== (nextFeedValues[index] || "")) {
+          changed.push(index + 1);
+        }
+      }
+      return changed;
+    }
+
+    function hashString(value) {
+      let hash = 0;
+      const text = String(value || "");
+      for (let index = 0; index < text.length; index += 1) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(index);
+        hash |= 0;
+      }
+      return Math.abs(hash);
+    }
+
+    function delay(ms) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+      });
+    }
+
+    function getFeedIndexesForUrl(url) {
+      return getFeedUrlsWithIndex()
+        .filter((feed) => feed.url === url)
+        .map((feed) => feed.index);
+    }
+
+    function getLinkedFeedIndexes(feedIndex) {
+      const configuredFeed = getConfiguredFeed(feedIndex);
+      if (!configuredFeed) return [];
+      return getFeedIndexesForUrl(configuredFeed.url);
+    }
+
+    function getEntriesByFeedIndex() {
+      const entriesByFeed = {};
+      getFeedUrlsWithIndex().forEach((feed) => {
+        entriesByFeed[feed.index] = [];
+      });
+      feedEntries.forEach((entry) => {
+        if (!entriesByFeed[entry.feedIndex]) {
+          entriesByFeed[entry.feedIndex] = [];
+        }
+        entriesByFeed[entry.feedIndex].push(entry);
+      });
+      return entriesByFeed;
+    }
+
+    function flattenFeedEntries(entriesByFeed) {
+      const flattened = [];
+      getFeedUrlsWithIndex().forEach((feed) => {
+        (entriesByFeed[feed.index] || []).forEach((entry) => {
+          flattened.push(entry);
+        });
+      });
+      return flattened;
+    }
+
+    function cloneEntriesForFeed(entries, feedIndex, feedTitle) {
+      return entries.map((entry) => ({
+        ...entry,
+        feedIndex,
+        feedTitle
+      }));
+    }
+
+    function getFeedFetchState(feedIndex) {
+      if (!feedFetchStateByFeed[feedIndex]) {
+        feedFetchStateByFeed[feedIndex] = sanitizeFeedFetchState();
+      }
+      return feedFetchStateByFeed[feedIndex];
+    }
+
+    function getFeedRefreshJitterMs(feedIndex) {
+      const configuredFeed = getConfiguredFeed(feedIndex);
+      const seed = WIDGET_STORAGE_KEY + "|" + (configuredFeed ? configuredFeed.url : "feed-" + feedIndex);
+      return hashString(seed) % ACTIVE_REFRESH_JITTER_WINDOW_MS;
+    }
+
+    function getFeedSuccessDueAt(feedIndex) {
+      const state = getFeedFetchState(feedIndex);
+      if (!state.lastFetchedAt) return 0;
+      return state.lastFetchedAt + getRefreshIntervalMs() + getFeedRefreshJitterMs(feedIndex);
+    }
+
+    function getFailureBackoffMs(feedIndex, failureCount) {
+      const baseDelay = getRefreshIntervalMs() * Math.max(1, Math.pow(2, Math.max(0, failureCount - 1)));
+      return Math.min(baseDelay + getFeedRefreshJitterMs(feedIndex), MAX_FAILURE_BACKOFF_MS);
+    }
+
+    function getFeedRefreshDueAt(feedIndex) {
+      const state = getFeedFetchState(feedIndex);
+      if (state.failureCount > 0 && state.nextRetryAt > 0) {
+        return state.nextRetryAt;
+      }
+      return getFeedSuccessDueAt(feedIndex);
+    }
+
+    function isFeedRefreshDue(feedIndex) {
+      const dueAt = getFeedRefreshDueAt(feedIndex);
+      return dueAt === 0 || Date.now() >= dueAt;
+    }
+
+    function getFeedRefreshDelay(feedIndex) {
+      const dueAt = getFeedRefreshDueAt(feedIndex);
+      if (!dueAt) return 0;
+      return Math.max(0, dueAt - Date.now());
+    }
+
+    function getFeedRequestGroups(feedIndexes) {
+      const targetSet = new Set(feedIndexes);
+      const groups = new Map();
+      getFeedUrlsWithIndex().forEach((feed) => {
+        if (!targetSet.has(feed.index)) return;
+        if (!groups.has(feed.url)) {
+          groups.set(feed.url, { url: feed.url, feedIndexes: [] });
+        }
+        groups.get(feed.url).feedIndexes.push(feed.index);
+      });
+      return Array.from(groups.values());
+    }
+
+    function findReusableFeedIndex(feedIndex, entriesByFeed, excludedIndexes = new Set()) {
+      const configuredFeed = getConfiguredFeed(feedIndex);
+      if (!configuredFeed) return null;
+      return getFeedIndexesForUrl(configuredFeed.url).find((candidateIndex) => {
+        if (candidateIndex === feedIndex || excludedIndexes.has(candidateIndex)) return false;
+        return (entriesByFeed[candidateIndex] || []).length > 0
+          || sanitizeFeedFetchState(feedFetchStateByFeed[candidateIndex]).lastFetchedAt > 0
+          || !!feedStatus[candidateIndex];
+      }) || null;
+    }
+
+    function copyFeedStateFromSource(sourceFeedIndex, targetFeedIndex, entriesByFeed) {
+      entriesByFeed[targetFeedIndex] = cloneEntriesForFeed(entriesByFeed[sourceFeedIndex] || [], targetFeedIndex, feedTitles[sourceFeedIndex] || getFeedName(sourceFeedIndex));
+      if (feedTitles[sourceFeedIndex]) {
+        feedTitles[targetFeedIndex] = feedTitles[sourceFeedIndex];
+      }
+      feedStatus[targetFeedIndex] = feedStatus[sourceFeedIndex] || "loaded";
+      feedFetchStateByFeed[targetFeedIndex] = sanitizeFeedFetchState(getFeedFetchState(sourceFeedIndex));
+      if (entriesByFeed[targetFeedIndex].length > 0) {
+        selectedStoryKeyByFeed[targetFeedIndex] = getEntryKey(entriesByFeed[targetFeedIndex][0]);
+      } else {
+        delete selectedStoryKeyByFeed[targetFeedIndex];
+      }
+    }
+
+    function clearFeedState(feedIndex) {
+      delete feedTitles[feedIndex];
+      delete feedStatus[feedIndex];
+      delete selectedStoryKeyByFeed[feedIndex];
+      delete feedFetchStateByFeed[feedIndex];
+    }
+
+    function getFeedName(feedIndex) {
+      return feedTitles[feedIndex] || ("Feed " + feedIndex);
+    }
+
+    function getEntryKey(entry) {
+      return [entry.feedIndex, entry.linkUrl || "", entry.title || "", entry.published || ""].join("|");
+    }
+
+    function getFeedHost(feedIndex) {
+      const currentFeed = getFeedUrlsWithIndex().find((feed) => feed.index === feedIndex);
+      if (!currentFeed) return "";
+      try {
+        return new URL(currentFeed.url).hostname.replace(/^www\./, "");
+      } catch (error) {
+        void error;
+        return "";
+      }
+    }
+
+    function isExpandedLayout() {
+      return layoutMode === "expanded";
+    }
+
+    function shouldListSelectPreview() {
+      return isExpandedLayout();
+    }
+
+    function shouldPreviewOpenLink() {
+      return isExpandedLayout();
+    }
+
+    function getFeedStoryCount(feedIndex) {
+      return feedEntries.filter((entry) => entry.feedIndex === feedIndex).length;
+    }
+
+    function getFeedMetaText(feedIndex) {
+      const host = getFeedHost(feedIndex);
+      const count = getFeedStoryCount(feedIndex);
+      const status = feedStatus[feedIndex];
+      const parts = [];
+
+      if (host) parts.push(host);
+      if (count > 0) {
+        parts.push(count === 1 ? "1 story" : count + " stories");
+      } else if (status === "loading") {
+        parts.push("loading");
+      } else if (status && status.indexOf("error:") === 0) {
+        parts.push("offline");
+      }
+
+      return parts.join(" - ") || "configured feed";
+    }
+
+    function showToast(messageOrPromise, type = "info", duration = 5000) {
+      if (!messageOrPromise) {
+        toastEl.classList.add("hidden");
+        toastTextEl.textContent = "";
+        if (toastTimer) {
+          clearTimeout(toastTimer);
+          toastTimer = null;
+        }
+        return;
+      }
+
+      toastEl.className = "toast toast-" + type;
+      if (messageOrPromise && typeof messageOrPromise.then === "function") {
+        toastTextEl.textContent = "";
+        messageOrPromise.then((text) => {
+          toastTextEl.textContent = text;
+          toastEl.classList.remove("hidden");
+        });
+      } else {
+        toastTextEl.textContent = messageOrPromise;
+        toastEl.classList.remove("hidden");
+      }
+
+      if (toastTimer) {
+        clearTimeout(toastTimer);
+        toastTimer = null;
+      }
+
+      if (duration > 0) {
+        toastTimer = setTimeout(() => {
+          toastEl.classList.add("hidden");
+        }, duration);
+      }
+    }
+
+    function getSelectedEntry(entries) {
+      if (!entries.length) return null;
+      const selectedKey = selectedStoryKeyByFeed[activeFeed];
+      return entries.find((entry) => getEntryKey(entry) === selectedKey) || entries[0];
+    }
+
+    function updateSelectedStorySelection() {
+      const selectedKey = selectedStoryKeyByFeed[activeFeed];
+      feedListEl.querySelectorAll(".feed-item[data-entry-key]").forEach((item) => {
+        item.classList.toggle("is-selected", item.dataset.entryKey === selectedKey);
+      });
+    }
+
+    function ensureActiveFeedIsValid() {
+      const feeds = getFeedUrlsWithIndex();
+      if (feeds.length === 0) {
+        activeFeed = 1;
+        return feeds;
+      }
+      const hasActiveFeed = feeds.some((feed) => feed.index === activeFeed);
+      if (!hasActiveFeed) activeFeed = feeds[0].index;
+      return feeds;
+    }
+
+    function renderFeedTabs() {
+      const feeds = ensureActiveFeedIsValid();
+      feedTabsEl.innerHTML = "";
+
+      for (const feed of feeds) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "feed-tab";
+        if (feed.index === activeFeed) button.classList.add("active");
+        button.dataset.feed = String(feed.index);
+        button.setAttribute("role", "tab");
+        button.setAttribute("aria-selected", feed.index === activeFeed ? "true" : "false");
+        button.style.setProperty("--tab-accent", getAccentColor(feed.index));
+
+        const nameEl = document.createElement("span");
+        nameEl.className = "feed-tab-name";
+        nameEl.textContent = getFeedName(feed.index);
+
+        const metaEl = document.createElement("span");
+        metaEl.className = "feed-tab-meta";
+        metaEl.textContent = getFeedMetaText(feed.index);
+
+        button.appendChild(nameEl);
+        button.appendChild(metaEl);
+        button.addEventListener("click", () => setActiveFeed(feed.index));
+        feedTabsEl.appendChild(button);
+      }
+    }
+
+    function setActiveFeed(feedIndex) {
+      if (activeFeed === feedIndex) return;
+      activeFeed = feedIndex;
+      renderFeedTabs();
+      renderActiveFeed();
+      ensureActiveFeedFresh();
+    }
+
+    function openStoryLink(url) {
+      if (!url) return;
+      if (window.plugins && window.plugins.Linkprovider && typeof window.plugins.Linkprovider.open === "function") {
+        window.plugins.Linkprovider.open(url);
+        return;
+      }
+      window.open(url, "_blank", "noopener");
+    }
+
+    function getStorySummary(entry) {
+      const summarySource = String(entry.description || "").replace(/\s+/g, " ").trim();
+      if (summarySource.length > 0) return summarySource.slice(0, 220);
+      return entry.title || "";
+    }
+
+    function renderPreviewState(options) {
+      if (!isExpandedLayout()) {
+        storyPreviewEl.classList.add("hidden");
+        previewLinkUrl = "";
+        return;
+      }
+
+      storyPreviewEl.classList.remove("hidden", "is-static");
+      storyPreviewEl.classList.toggle("is-skeleton", options.mode === "loading");
+      storyPreviewEl.classList.toggle("has-image", false);
+      previewImageEl.classList.add("hidden");
+      previewImageEl.removeAttribute("src");
+      setLocalizedText(previewTitleEl, options.title || "");
+      setLocalizedText(previewSummaryEl, options.summary || "");
+      setTextContent(previewPublishedEl, options.meta || "");
+      setTextContent(previewSourceEl, options.source || "");
+      previewLinkUrl = "";
+      storyPreviewEl.disabled = true;
+
+      if (options.mode === "message") {
+        storyPreviewEl.classList.add("is-static");
+      }
+    }
+
+    function renderPreview(entry) {
+      if (!isExpandedLayout()) {
+        storyPreviewEl.classList.add("hidden");
+        previewLinkUrl = "";
+        return;
+      }
+
+      storyPreviewEl.classList.remove("hidden", "is-skeleton", "is-static");
+      previewLinkUrl = shouldPreviewOpenLink() ? (entry.linkUrl || "") : "";
+      storyPreviewEl.disabled = !previewLinkUrl;
+      storyPreviewEl.classList.toggle("is-static", !previewLinkUrl);
+      if (entry.title) {
+        setTextContent(previewTitleEl, entry.title);
+      } else {
+        setLocalizedText(previewTitleEl, "Untitled");
+      }
+      setTextContent(previewSummaryEl, getStorySummary(entry));
+      setTextContent(previewPublishedEl, formatDate(entry.published));
+      setTextContent(previewSourceEl, getFeedHost(entry.feedIndex));
+
+      if (entry.imageUrl) {
+        previewImageEl.src = entry.imageUrl;
+        previewImageEl.classList.remove("hidden");
+        storyPreviewEl.classList.add("has-image");
+      } else {
+        previewImageEl.classList.add("hidden");
+        previewImageEl.removeAttribute("src");
+        storyPreviewEl.classList.remove("has-image");
+      }
+    }
+
+    function createStateCard(title, detail, action = null) {
+      const card = document.createElement("div");
+      card.className = "feed-state-card";
+
+      const titleEl = document.createElement("div");
+      titleEl.className = "feed-state-title";
+      setLocalizedText(titleEl, title);
+
+      const detailEl = document.createElement("div");
+      detailEl.className = "feed-state-detail";
+      setLocalizedText(detailEl, detail);
+
+      card.appendChild(titleEl);
+      card.appendChild(detailEl);
+
+      if (action && typeof action.onClick === "function") {
+        const rowEl = document.createElement("div");
+        rowEl.className = "feed-state-row";
+
+        const actionEl = document.createElement("button");
+        actionEl.type = "button";
+        actionEl.className = "feed-state-action";
+        setLocalizedText(actionEl, action.label || "Retry");
+        actionEl.addEventListener("click", (event) => {
+          event.stopPropagation();
+          action.onClick();
+        });
+
+        rowEl.appendChild(actionEl);
+        card.appendChild(rowEl);
+      }
+
+      return card;
+    }
+
+    async function retrySingleFeed(feedIndex) {
+      const linkedFeedIndexes = getLinkedFeedIndexes(feedIndex);
+      if (!linkedFeedIndexes.length) return;
+      linkedFeedIndexes.forEach((index) => {
+        const state = getFeedFetchState(index);
+        state.failureCount = 0;
+        state.nextRetryAt = 0;
+      });
+      refreshFeedIndexes(linkedFeedIndexes, { force: true });
+    }
+
+    function renderSkeleton(count) {
+      feedListEl.innerHTML = "";
+      renderPreviewState({
+        mode: "loading",
+        title: "Loading stories",
+        summary: "Fetching the newest headlines for this feed.",
+        meta: "",
+        source: ""
+      });
+
+      for (let index = 0; index < count; index += 1) {
+        const item = document.createElement("div");
+        item.className = "feed-item feed-item-skeleton";
+
+        const body = document.createElement("div");
+        body.className = "feed-item-body";
+
+        const title = document.createElement("div");
+        title.className = "feed-item-title skeleton-block";
+
+        const summary = document.createElement("div");
+        summary.className = "feed-item-summary skeleton-block";
+
+        const meta = document.createElement("div");
+        meta.className = "feed-item-footer skeleton-block";
+
+        body.appendChild(title);
+        body.appendChild(summary);
+        item.appendChild(body);
+        item.appendChild(meta);
+        feedListEl.appendChild(item);
+      }
+    }
+
+    function createFeedPlaceholder(title, detail, meta = "Widget Settings") {
+      const item = document.createElement("div");
+      item.className = "feed-item feed-item-placeholder is-static";
+      item.style.setProperty("--item-accent", "rgba(255, 255, 255, 0.16)");
+
+      const body = document.createElement("div");
+      body.className = "feed-item-body";
+
+      const titleEl = document.createElement("div");
+      titleEl.className = "feed-item-title";
+      setLocalizedText(titleEl, title);
+
+      const detailEl = document.createElement("div");
+      detailEl.className = "feed-item-summary";
+      setLocalizedText(detailEl, detail);
+
+      const metaEl = document.createElement("div");
+      metaEl.className = "feed-item-footer";
+      setLocalizedText(metaEl, meta);
+
+      body.appendChild(titleEl);
+      body.appendChild(detailEl);
+      item.appendChild(body);
+      item.appendChild(metaEl);
+      return item;
+    }
+
+    function renderEntries(entries) {
+      feedListEl.innerHTML = "";
+      const selectedEntry = getSelectedEntry(entries);
+      if (selectedEntry) {
+        selectedStoryKeyByFeed[activeFeed] = getEntryKey(selectedEntry);
+      }
+      renderPreview(selectedEntry);
+
+      if (entries.length === 0) {
+        feedListEl.appendChild(createStateCard("No Stories Yet", "This feed loaded, but there are no articles to show right now."));
+        return;
+      }
+
+      entries.forEach((entry) => {
+        const entryKey = getEntryKey(entry);
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "feed-item";
+        item.dataset.entryKey = entryKey;
+        item.style.setProperty("--item-accent", getAccentColor(entry.feedIndex));
+        const canSelectPreview = shouldListSelectPreview();
+        const canOpenStory = Boolean(entry.linkUrl);
+        if (!canOpenStory && !canSelectPreview) item.classList.add("is-static");
+        item.disabled = !canOpenStory && !canSelectPreview;
+        item.addEventListener("click", () => {
+          if (canSelectPreview) {
+            selectedStoryKeyByFeed[activeFeed] = entryKey;
+            renderPreview(entry);
+            updateSelectedStorySelection();
+            return;
+          }
+          if (entry.linkUrl) openStoryLink(entry.linkUrl);
+        });
+
+        const body = document.createElement("div");
+        body.className = "feed-item-body";
+
+        const title = document.createElement("div");
+        title.className = "feed-item-title";
+        title.textContent = entry.title || "Untitled";
+        if (!entry.title && typeof tr === "function") {
+          tr("Untitled").then((translated) => {
+            title.textContent = translated;
+          });
+        }
+
+        const summary = document.createElement("div");
+        summary.className = "feed-item-summary";
+        const timeText = formatDate(entry.published);
+        const summaryText = getStorySummary(entry);
+        summary.textContent = timeText ? summaryText + " - " + timeText : summaryText;
+
+        body.appendChild(title);
+        body.appendChild(summary);
+
+        item.appendChild(body);
+
+        if (entry.imageUrl && !isExpandedLayout()) {
+          const thumb = document.createElement("img");
+          thumb.className = "feed-item-thumb";
+          thumb.alt = "";
+          thumb.loading = "lazy";
+          thumb.src = entry.imageUrl;
+          thumb.addEventListener("error", () => {
+            thumb.remove();
+          });
+          item.appendChild(thumb);
+        }
+
+        feedListEl.appendChild(item);
+      });
+
+      updateSelectedStorySelection();
+    }
+
+    function renderActiveFeed() {
+      const filteredEntries = feedEntries.filter((entry) => entry.feedIndex === activeFeed);
+      const currentStatus = feedStatus[activeFeed];
+
+      renderFeedTabs();
+
+      if (filteredEntries.length > 0) {
+        showToast("");
+        renderEntries(filteredEntries);
+        return;
+      }
+
+      if (currentStatus === "loading") {
+        showToast("");
+        renderSkeleton(4);
+        return;
+      }
+
+      if (currentStatus && currentStatus.indexOf("error:") === 0) {
+        feedListEl.innerHTML = "";
+        renderPreviewState({
+          mode: "message",
+          title: "Unable To Load Feed",
+          summary: "Unable to load feed. Check URL, feed limits, or network.",
+          meta: "",
+          source: getFeedHost(activeFeed)
+        });
+        feedListEl.appendChild(createStateCard(
+          "Unable To Load Feed",
+          "Unable to load feed. Check URL, feed limits, or network.",
+          {
+            label: "Retry",
+            onClick: () => retrySingleFeed(activeFeed)
+          }
+        ));
+        showToast(localize("Unable To Load Feed"), "error", 8000);
+        return;
+      }
+
+      if (currentStatus === "loaded") {
+        feedListEl.innerHTML = "";
+        renderPreviewState({
+          mode: "message",
+          title: "No Stories Yet",
+          summary: "This feed loaded, but there are no articles to show right now.",
+          meta: "",
+          source: getFeedHost(activeFeed)
+        });
+        feedListEl.appendChild(createStateCard("No Stories Yet", "This feed loaded, but there are no articles to show right now."));
+        return;
+      }
+
+      renderPreviewState({
+        mode: "message",
+        title: "Add Feed To Use Widget",
+        summary: "Add at least one RSS feed URL in settings.",
+        meta: "",
+        source: ""
+      });
+      feedListEl.innerHTML = "";
+      feedListEl.appendChild(createFeedPlaceholder(
+        "Add Feed To Use Widget",
+        "Add at least one RSS feed URL in settings.",
+        "Widget Settings"
+      ));
+    }
+
+    function rerenderCurrentFeedForLayout() {
+      const scrollRange = Math.max(0, feedListEl.scrollHeight - feedListEl.clientHeight);
+      const scrollRatio = scrollRange > 0 ? feedListEl.scrollTop / scrollRange : 0;
+      renderActiveFeed();
+      requestAnimationFrame(() => {
+        const nextRange = Math.max(0, feedListEl.scrollHeight - feedListEl.clientHeight);
+        feedListEl.scrollTop = nextRange > 0 ? Math.round(scrollRatio * nextRange) : 0;
+      });
+    }
+
+    async function unwrapResponse(response, kind) {
+      if (kind === "allorigins") {
+        const json = await response.json();
+        if (json.status && json.status.http_code >= 400) {
+          throw new Error("Upstream HTTP " + json.status.http_code);
+        }
+        return json.contents || "";
+      }
+      return response.text();
+    }
+
+    function looksLikeFeedXml(text) {
+      const sample = String(text || "").trimStart().slice(0, 600).toLowerCase();
+      if (!sample.startsWith("<")) return false;
+      if (sample.startsWith("<!doctype html") || sample.startsWith("<html")) return false;
+      return sample.includes("<rss") || sample.includes("<feed") || sample.includes("<rdf:rdf") || sample.includes("<channel");
+    }
+
+    async function fetchWithProxy(url) {
+      let lastError = "";
+      const fetchSources = [DIRECT_FETCH_SOURCE, ...CORS_PROXIES];
+      for (const proxy of fetchSources) {
+        let timeoutId = null;
+        try {
+          const proxyUrl = proxy.fn(url);
+          const controller = new AbortController();
+          timeoutId = setTimeout(() => controller.abort(), FEED_FETCH_TIMEOUT_MS);
+          const response = await fetch(proxyUrl, {
+            cache: "default",
+            headers: { Accept: "application/rss+xml, application/xml, text/xml, */*" },
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+
+          if (!response.ok) {
+            lastError = "HTTP " + response.status;
+            continue;
+          }
+
+          const text = await unwrapResponse(response, proxy.unwrap);
+          if (looksLikeFeedXml(text)) {
+            return text;
+          }
+          lastError = "Response is not a supported RSS/Atom feed";
+        } catch (error) {
+          if (timeoutId) clearTimeout(timeoutId);
+          lastError = error.name === "AbortError" ? "Request timed out" : (error.message || "Network error");
+        }
+      }
+
+      throw new Error("All fetch methods failed for: " + url + " (" + lastError + ")");
+    }
+
+    async function fetchRssFeed(url) {
+      const xmlText = await fetchWithProxy(url);
+      const xml = new DOMParser().parseFromString(xmlText, "application/xml");
+      if (xml.querySelector("parsererror")) {
+        throw new Error("RSS parse error for: " + url);
+      }
+
+      const feedTitleNode = xml.querySelector("channel > title, feed > title");
+      const feedTitle = feedTitleNode ? decodeHtml(feedTitleNode.textContent) : "Feed";
+      const itemNodes = Array.from(xml.querySelectorAll("item, entry")).slice(0, 15);
+
+      const entries = itemNodes.map((itemNode) => {
+        const titleNode = itemNode.querySelector("title");
+        const descNode = itemNode.querySelector("description, summary, content");
+        const dateNode = itemNode.querySelector("pubDate, published, updated");
+        const linkNode = itemNode.querySelector("link");
+        let linkUrl = "";
+
+        if (linkNode) {
+          linkUrl = (linkNode.getAttribute("href") || linkNode.textContent || "").trim();
+        }
+
+        if (!linkUrl) {
+          const guidNode = itemNode.querySelector("guid");
+          if (guidNode && guidNode.getAttribute("isPermaLink") !== "false") {
+            linkUrl = (guidNode.textContent || "").trim();
+          }
+        }
+
+        return {
+          feedTitle,
+          title: decodeHtml(titleNode ? titleNode.textContent : ""),
+          description: decodeHtml(descNode ? descNode.textContent : ""),
+          published: dateNode ? dateNode.textContent : "",
+          imageUrl: extractImage(itemNode),
+          linkUrl
+        };
+      });
+
+      return { feedTitle, entries };
+    }
+
+    function clearAllFeedsState() {
+      feedEntries = [];
+      feedTitles = {};
+      feedStatus = {};
+      selectedStoryKeyByFeed = {};
+      feedFetchStateByFeed = {};
+      pendingReload = false;
+      renderFeedTabs();
+      renderActiveFeed();
+    }
+
+    async function refreshFeedIndexes(feedIndexes, options = {}) {
+      const { force = false, resetContent = false } = options;
+      const feeds = getFeedUrlsWithIndex();
+      if (feeds.length === 0) {
+        clearAllFeedsState();
+        clearPersistedFeedCache();
+        showToast(localize("Add Feed To Use Widget"), "info", 0);
+        return;
+      }
+
+      const configuredSet = new Set(feeds.map((feed) => feed.index));
+      const requestedIndexes = Array.from(new Set(feedIndexes));
+      const entriesByFeed = getEntriesByFeedIndex();
+
+      requestedIndexes.forEach((feedIndex) => {
+        if (!configuredSet.has(feedIndex)) {
+          clearFeedState(feedIndex);
+          delete entriesByFeed[feedIndex];
+        }
+      });
+
+      const targetIndexes = requestedIndexes.filter((feedIndex) => configuredSet.has(feedIndex));
+      if (!targetIndexes.length) {
+        feedEntries = flattenFeedEntries(entriesByFeed);
+        syncPersistedFeedCache(computeFeedKey());
+        renderFeedTabs();
+        renderActiveFeed();
+        scheduleRefresh();
+        return;
+      }
+
+      const excludedIndexes = new Set(targetIndexes);
+      const networkTargetIndexes = [];
+      targetIndexes.forEach((feedIndex) => {
+        if (!resetContent) {
+          networkTargetIndexes.push(feedIndex);
+          return;
+        }
+        const reusableFeedIndex = findReusableFeedIndex(feedIndex, entriesByFeed, excludedIndexes);
+        if (reusableFeedIndex) {
+          copyFeedStateFromSource(reusableFeedIndex, feedIndex, entriesByFeed);
+          return;
+        }
+        networkTargetIndexes.push(feedIndex);
+      });
+
+      feedEntries = flattenFeedEntries(entriesByFeed);
+      if (networkTargetIndexes.length !== targetIndexes.length) {
+        syncPersistedFeedCache(computeFeedKey());
+        renderFeedTabs();
+        renderActiveFeed();
+      }
+
+      const dueIndexes = force ? networkTargetIndexes : networkTargetIndexes.filter((feedIndex) => isFeedRefreshDue(feedIndex));
+      if (!dueIndexes.length) {
+        scheduleRefresh();
+        return;
+      }
+
+      dueIndexes.forEach((feedIndex) => {
+        if (resetContent) {
+          entriesByFeed[feedIndex] = [];
+          delete feedTitles[feedIndex];
+          delete selectedStoryKeyByFeed[feedIndex];
+          feedFetchStateByFeed[feedIndex] = sanitizeFeedFetchState();
+        }
+        feedStatus[feedIndex] = "loading";
+      });
+
+      if (resetContent) {
+        feedEntries = flattenFeedEntries(entriesByFeed);
+      }
+      renderFeedTabs();
+      renderActiveFeed();
+
+      if (isLoading) {
+        pendingReload = true;
+        return;
+      }
+
+      isLoading = true;
+      pendingReload = false;
+      const requestFeedKey = computeFeedKey();
+
+      try {
+        const requestGroups = getFeedRequestGroups(dueIndexes);
+        for (let groupIndex = 0; groupIndex < requestGroups.length; groupIndex += 1) {
+          const group = requestGroups[groupIndex];
+          const attemptAt = Date.now();
+
+          group.feedIndexes.forEach((feedIndex) => {
+            const state = getFeedFetchState(feedIndex);
+            state.lastAttemptedAt = attemptAt;
+          });
+
+          try {
+            const sharedPayload = await fetchRssFeed(group.url);
+            if (pendingReload || requestFeedKey !== computeFeedKey()) {
+              return;
+            }
+
+            const completedAt = Date.now();
+            group.feedIndexes.forEach((feedIndex) => {
+              const feedState = getFeedFetchState(feedIndex);
+              const nextFeedEntries = cloneEntriesForFeed(sharedPayload.entries, feedIndex, sharedPayload.feedTitle);
+              entriesByFeed[feedIndex] = nextFeedEntries;
+
+              if (sharedPayload.feedTitle) {
+                feedTitles[feedIndex] = sharedPayload.feedTitle;
+              }
+
+              if (nextFeedEntries.length > 0) {
+                const currentSelectedKey = selectedStoryKeyByFeed[feedIndex];
+                const hasCurrentSelection = nextFeedEntries.some((entry) => getEntryKey(entry) === currentSelectedKey);
+                if (!hasCurrentSelection) {
+                  selectedStoryKeyByFeed[feedIndex] = getEntryKey(nextFeedEntries[0]);
+                }
+              } else {
+                delete selectedStoryKeyByFeed[feedIndex];
+              }
+
+              feedStatus[feedIndex] = "loaded";
+              feedState.lastFetchedAt = completedAt;
+              feedState.lastAttemptedAt = completedAt;
+              feedState.failureCount = 0;
+              feedState.nextRetryAt = 0;
+            });
+          } catch (error) {
+            if (pendingReload || requestFeedKey !== computeFeedKey()) {
+              return;
+            }
+
+            const failedAt = Date.now();
+            group.feedIndexes.forEach((feedIndex) => {
+              console.error("Feed " + feedIndex + " error:", error);
+              const feedState = getFeedFetchState(feedIndex);
+              const nextFailureCount = feedState.failureCount + 1;
+              feedState.lastAttemptedAt = failedAt;
+              feedState.failureCount = nextFailureCount;
+              feedState.nextRetryAt = failedAt + getFailureBackoffMs(feedIndex, nextFailureCount);
+              feedStatus[feedIndex] = FEED_LOAD_ERROR_STATUS;
+            });
+          }
+
+          feedEntries = flattenFeedEntries(entriesByFeed);
+          syncPersistedFeedCache(requestFeedKey);
+          renderFeedTabs();
+          renderActiveFeed();
+
+          if (groupIndex < requestGroups.length - 1) {
+            await delay(FEED_FETCH_STAGGER_MS);
+            if (pendingReload || requestFeedKey !== computeFeedKey()) {
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("RSS refresh error:", error);
+        const failedAt = Date.now();
+        dueIndexes.forEach((feedIndex) => {
+          if (feedStatus[feedIndex] === "loading") {
+            const feedState = getFeedFetchState(feedIndex);
+            const nextFailureCount = feedState.failureCount + 1;
+            feedState.lastAttemptedAt = failedAt;
+            feedState.failureCount = nextFailureCount;
+            feedState.nextRetryAt = failedAt + getFailureBackoffMs(feedIndex, nextFailureCount);
+            feedStatus[feedIndex] = FEED_LOAD_ERROR_STATUS;
+          }
+        });
+        feedEntries = flattenFeedEntries(entriesByFeed);
+        syncPersistedFeedCache(requestFeedKey);
+        renderFeedTabs();
+        renderActiveFeed();
+      } finally {
+        isLoading = false;
+        if (pendingReload || requestFeedKey !== computeFeedKey()) {
+          pendingReload = false;
+          onIcueDataUpdated();
+          return;
+        }
+        scheduleRefresh();
+      }
+    }
+
+    function scheduleRefresh() {
+      if (refreshTimer) clearTimeout(refreshTimer);
+      refreshTimer = null;
+
+      const activeConfiguredFeed = getConfiguredFeed(activeFeed);
+      if (!activeConfiguredFeed) return;
+
+      const linkedFeedIndexes = getLinkedFeedIndexes(activeFeed);
+      if (!linkedFeedIndexes.length) return;
+
+      const nextDelay = linkedFeedIndexes.reduce((smallestDelay, feedIndex) => {
+        return Math.min(smallestDelay, getFeedRefreshDelay(feedIndex));
+      }, Number.POSITIVE_INFINITY);
+
+      refreshTimer = setTimeout(() => {
+        refreshTimer = null;
+        ensureActiveFeedFresh();
+      }, Number.isFinite(nextDelay) ? nextDelay : 0);
+    }
+
+    function ensureActiveFeedFresh(options = {}) {
+      const { force = false } = options;
+      const activeConfiguredFeed = getConfiguredFeed(activeFeed);
+      if (!activeConfiguredFeed) {
+        scheduleRefresh();
+        return;
+      }
+
+      const linkedFeedIndexes = getLinkedFeedIndexes(activeFeed);
+      if (!linkedFeedIndexes.length) {
+        scheduleRefresh();
+        return;
+      }
+
+      const shouldRefresh = force || linkedFeedIndexes.some((feedIndex) => isFeedRefreshDue(feedIndex));
+      if (!shouldRefresh) {
+        scheduleRefresh();
+        return;
+      }
+
+      refreshFeedIndexes(linkedFeedIndexes, { force });
+    }
+
+    function onIcueDataUpdated() {
+      applyStyles();
+      const feedValues = getFeedValues();
+      const feedKey = computeFeedKey();
+      const changedFeedIndexes = getChangedFeedIndexes(feedValues);
+      const feedsChanged = changedFeedIndexes.length > 0;
+      const configuredFeeds = ensureActiveFeedIsValid();
+
+      lastFeedKey = feedKey;
+      lastFeedValues = feedValues;
+
+      if (configuredFeeds.length === 0) {
+        if (refreshTimer) clearTimeout(refreshTimer);
+        refreshTimer = null;
+        clearAllFeedsState();
+        clearPersistedFeedCache();
+        showToast(localize("Add Feed To Use Widget"), "info", 0);
+        return;
+      }
+
+      if (feedsChanged) {
+        if (changedFeedIndexes.length === MAX_FEEDS || (!Object.keys(feedStatus).length && feedEntries.length === 0)) {
+          clearAllFeedsState();
+          const cacheState = restorePersistedFeedCache(feedKey);
+          if (!cacheState.restored) {
+            renderFeedTabs();
+            renderActiveFeed();
+          }
+          ensureActiveFeedFresh({ force: !cacheState.restored });
+          return;
+        }
+        refreshFeedIndexes(changedFeedIndexes, { force: true, resetContent: true });
+        return;
+      }
+
+      if (feedEntries.length > 0 || Object.keys(feedStatus).length > 0) {
+        rerenderCurrentFeedForLayout();
+        ensureActiveFeedFresh();
+        return;
+      }
+
+      const cacheState = restorePersistedFeedCache(feedKey);
+      if (!cacheState.restored) {
+        renderFeedTabs();
+        renderActiveFeed();
+      }
+      ensureActiveFeedFresh({ force: !cacheState.restored });
+    }
+
+    function onIcueInitialized() {
+      onIcueDataUpdated();
+    }
+
+    window.addEventListener("resize", () => {
+      if (resizeDebounce) clearTimeout(resizeDebounce);
+      resizeDebounce = setTimeout(() => {
+        applyLayoutMode();
+      }, 90);
+    });
+
+    // Remove the old top-level cache key from versions before the widget stored
+    // feeds nested inside the uniqueId-keyed blob.
+    try { localStorage.removeItem('rssFeedReaderCache'); } catch(e) {}
+
+    if (typeof iCUE_initialized !== "undefined" && iCUE_initialized) {
+      onIcueInitialized();
+    } else {
+      onIcueDataUpdated();
+    }
+  </script>
+</body>
+</html>

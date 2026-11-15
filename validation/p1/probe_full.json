@@ -1,0 +1,1342 @@
+{
+ "machine": {
+  "ram_gb": 31.8,
+  "free_gb_at_start": 14.2,
+  "logical_cpus": 20,
+  "max_gb_guard": 8.0
+ },
+ "levels": [
+  {
+   "kind": "static-same",
+   "n": 1,
+   "baseline": {
+    "py_ws": 126.1,
+    "py_priv": 90.3,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 126.1
+   },
+   "load_seconds": 0.8,
+   "steady_after_load": {
+    "py_ws": 265.5,
+    "py_priv": 210.3,
+    "kids": 1,
+    "kids_ws": 64.8,
+    "kids_priv": 16.6,
+    "total_ws": 330.3
+   },
+   "peak_during_load_mb": 330.3,
+   "types": {
+    "renderer": 1
+   },
+   "watchers": 1,
+   "active_timers": 1,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 4.32,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 7.75,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 331.0,
+    "ws_end_mb": 321.2,
+    "counters": {
+     "folder_scans": 93,
+     "watcher_polls": 93
+    }
+   },
+   "settings": {
+    "seconds": 2.0,
+    "cpu_py_avg": 2.32,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 3.09,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 318.2,
+    "ws_end_mb": 318.2,
+    "counters": {
+     "folder_scans": 18,
+     "watcher_polls": 18
+    },
+    "page_onDataUpdated_after_20_edits_per_instance": [
+     20.0
+    ]
+   },
+   "reload": {
+    "expected_reloads": 1,
+    "done": true,
+    "seconds": 2.1,
+    "counters": {
+     "measure_js": 1,
+     "folder_scans": 19,
+     "bridges_created": 1,
+     "watcher_polls": 19,
+     "load_finished": 1,
+     "watcher_events": 1,
+     "reload_calls": 1
+    },
+    "reloads_per_instance": [
+     1
+    ]
+   },
+   "after_reload": {
+    "py_ws": 263.1,
+    "py_priv": 207.7,
+    "kids": 1,
+    "kids_ws": 66.0,
+    "kids_priv": 17.7,
+    "total_ws": 329.1
+   },
+   "after_close_half": {
+    "py_ws": 265.8,
+    "py_priv": 209.6,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 265.8
+   },
+   "after_remove_all": {
+    "py_ws": 265.9,
+    "py_priv": 209.6,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 265.9
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "static-same",
+   "n": 3,
+   "baseline": {
+    "py_ws": 266.0,
+    "py_priv": 210.8,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 266.0
+   },
+   "load_seconds": 0.8,
+   "steady_after_load": {
+    "py_ws": 275.0,
+    "py_priv": 221.5,
+    "kids": 3,
+    "kids_ws": 183.6,
+    "kids_priv": 49.7,
+    "total_ws": 458.6
+   },
+   "peak_during_load_mb": 459.9,
+   "types": {
+    "renderer": 3
+   },
+   "watchers": 1,
+   "active_timers": 1,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 2.47,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 6.18,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 459.1,
+    "ws_end_mb": 459.1,
+    "counters": {
+     "folder_scans": 94,
+     "watcher_polls": 94
+    }
+   },
+   "settings": {
+    "seconds": 2.0,
+    "cpu_py_avg": 0.77,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 1.55,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 446.0,
+    "ws_end_mb": 446.0,
+    "counters": {
+     "folder_scans": 18,
+     "watcher_polls": 18
+    },
+    "page_onDataUpdated_after_20_edits_per_instance": [
+     0.0,
+     0.0,
+     20.0
+    ]
+   },
+   "reload": {
+    "expected_reloads": 3,
+    "done": true,
+    "seconds": 2.2,
+    "counters": {
+     "measure_js": 1,
+     "folder_scans": 21,
+     "bridges_created": 3,
+     "watcher_polls": 21,
+     "load_finished": 3,
+     "watcher_events": 1,
+     "reload_calls": 3
+    },
+    "reloads_per_instance": [
+     1,
+     1,
+     1
+    ]
+   },
+   "after_reload": {
+    "py_ws": 272.8,
+    "py_priv": 218.8,
+    "kids": 3,
+    "kids_ws": 186.9,
+    "kids_priv": 51.7,
+    "total_ws": 459.7
+   },
+   "after_close_half": {
+    "py_ws": 272.7,
+    "py_priv": 219.1,
+    "kids": 2,
+    "kids_ws": 126.4,
+    "kids_priv": 34.7,
+    "total_ws": 399.2
+   },
+   "after_remove_all": {
+    "py_ws": 271.8,
+    "py_priv": 217.0,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 271.8
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "static-same",
+   "n": 10,
+   "baseline": {
+    "py_ws": 272.4,
+    "py_priv": 217.2,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 272.4
+   },
+   "load_seconds": 2.5,
+   "steady_after_load": {
+    "py_ws": 292.1,
+    "py_priv": 246.4,
+    "kids": 10,
+    "kids_ws": 615.6,
+    "kids_priv": 173.6,
+    "total_ws": 907.8
+   },
+   "peak_during_load_mb": 911.0,
+   "types": {
+    "renderer": 10
+   },
+   "watchers": 1,
+   "active_timers": 1,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 2.93,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 4.64,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 908.2,
+    "ws_end_mb": 908.2,
+    "counters": {
+     "folder_scans": 93,
+     "watcher_polls": 93
+    }
+   },
+   "settings": {
+    "seconds": 2.0,
+    "cpu_py_avg": 3.87,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 4.65,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 900.3,
+    "ws_end_mb": 900.3,
+    "counters": {
+     "folder_scans": 19,
+     "watcher_polls": 19
+    },
+    "page_onDataUpdated_after_20_edits_per_instance": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     20.0
+    ]
+   },
+   "reload": {
+    "expected_reloads": 10,
+    "done": true,
+    "seconds": 3.2,
+    "counters": {
+     "measure_js": 1,
+     "folder_scans": 29,
+     "bridges_created": 10,
+     "watcher_polls": 29,
+     "load_finished": 10,
+     "watcher_events": 1,
+     "reload_calls": 10
+    },
+    "reloads_per_instance": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "after_reload": {
+    "py_ws": 294.3,
+    "py_priv": 248.7,
+    "kids": 10,
+    "kids_ws": 626.4,
+    "kids_priv": 178.5,
+    "total_ws": 920.7
+   },
+   "after_close_half": {
+    "py_ws": 292.8,
+    "py_priv": 248.9,
+    "kids": 5,
+    "kids_ws": 316.5,
+    "kids_priv": 91.2,
+    "total_ws": 609.4
+   },
+   "after_remove_all": {
+    "py_ws": 275.7,
+    "py_priv": 225.7,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 275.7
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "static-distinct",
+   "n": 1,
+   "baseline": {
+    "py_ws": 276.7,
+    "py_priv": 226.8,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 276.7
+   },
+   "load_seconds": 0.2,
+   "steady_after_load": {
+    "py_ws": 284.7,
+    "py_priv": 230.8,
+    "kids": 1,
+    "kids_ws": 64.6,
+    "kids_priv": 16.7,
+    "total_ws": 349.3
+   },
+   "peak_during_load_mb": 349.4,
+   "types": {
+    "renderer": 1
+   },
+   "watchers": 1,
+   "active_timers": 1,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 2.32,
+    "cpu_kids_avg": 0.15,
+    "cpu_py_max": 6.19,
+    "cpu_kids_max": 1.54,
+    "ws_peak_mb": 350.0,
+    "ws_end_mb": 340.4,
+    "counters": {
+     "folder_scans": 93,
+     "watcher_polls": 93
+    }
+   },
+   "settings": {
+    "seconds": 2.0,
+    "cpu_py_avg": 0.77,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 1.54,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 336.6,
+    "ws_end_mb": 336.6,
+    "counters": {
+     "folder_scans": 18,
+     "watcher_polls": 18
+    },
+    "page_onDataUpdated_after_20_edits_per_instance": [
+     20.0
+    ]
+   },
+   "reload": {
+    "expected_reloads": 1,
+    "done": true,
+    "seconds": 2.1,
+    "counters": {
+     "measure_js": 1,
+     "folder_scans": 19,
+     "bridges_created": 1,
+     "watcher_polls": 19,
+     "load_finished": 1,
+     "watcher_events": 1,
+     "reload_calls": 1
+    },
+    "reloads_per_instance": [
+     1
+    ]
+   },
+   "after_reload": {
+    "py_ws": 279.7,
+    "py_priv": 225.6,
+    "kids": 1,
+    "kids_ws": 66.4,
+    "kids_priv": 17.8,
+    "total_ws": 346.1
+   },
+   "after_close_half": {
+    "py_ws": 281.2,
+    "py_priv": 229.1,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 281.2
+   },
+   "after_remove_all": {
+    "py_ws": 281.2,
+    "py_priv": 229.1,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 281.2
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "static-distinct",
+   "n": 3,
+   "baseline": {
+    "py_ws": 281.4,
+    "py_priv": 229.3,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 281.4
+   },
+   "load_seconds": 0.7,
+   "steady_after_load": {
+    "py_ws": 286.5,
+    "py_priv": 236.1,
+    "kids": 3,
+    "kids_ws": 183.6,
+    "kids_priv": 49.7,
+    "total_ws": 470.0
+   },
+   "peak_during_load_mb": 471.8,
+   "types": {
+    "renderer": 3
+   },
+   "watchers": 3,
+   "active_timers": 3,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 2.92,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 9.23,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 470.2,
+    "ws_end_mb": 470.2,
+    "counters": {
+     "folder_scans": 281,
+     "watcher_polls": 281
+    }
+   },
+   "settings": {
+    "seconds": 2.0,
+    "cpu_py_avg": 5.38,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 7.71,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 457.1,
+    "ws_end_mb": 457.1,
+    "counters": {
+     "folder_scans": 56,
+     "watcher_polls": 56
+    },
+    "page_onDataUpdated_after_20_edits_per_instance": [
+     0.0,
+     0.0,
+     20.0
+    ]
+   },
+   "reload": {
+    "expected_reloads": 1,
+    "done": true,
+    "seconds": 2.1,
+    "counters": {
+     "folder_scans": 56,
+     "bridges_created": 1,
+     "watcher_polls": 56,
+     "load_finished": 1,
+     "watcher_events": 1,
+     "reload_calls": 1
+    },
+    "reloads_per_instance": [
+     1,
+     0,
+     0
+    ]
+   },
+   "after_reload": {
+    "py_ws": 276.6,
+    "py_priv": 226.2,
+    "kids": 3,
+    "kids_ws": 185.1,
+    "kids_priv": 50.7,
+    "total_ws": 461.8
+   },
+   "after_close_half": {
+    "py_ws": 276.5,
+    "py_priv": 226.7,
+    "kids": 2,
+    "kids_ws": 124.6,
+    "kids_priv": 33.7,
+    "total_ws": 401.1
+   },
+   "after_remove_all": {
+    "py_ws": 278.1,
+    "py_priv": 223.6,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 278.1
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "static-distinct",
+   "n": 10,
+   "baseline": {
+    "py_ws": 278.6,
+    "py_priv": 224.1,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 278.6
+   },
+   "load_seconds": 2.4,
+   "steady_after_load": {
+    "py_ws": 298.4,
+    "py_priv": 253.0,
+    "kids": 10,
+    "kids_ws": 609.8,
+    "kids_priv": 169.8,
+    "total_ws": 908.1
+   },
+   "peak_during_load_mb": 914.2,
+   "types": {
+    "renderer": 10
+   },
+   "watchers": 10,
+   "active_timers": 10,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 5.39,
+    "cpu_kids_avg": 0.0,
+    "cpu_py_max": 10.78,
+    "cpu_kids_max": 0.0,
+    "ws_peak_mb": 910.2,
+    "ws_end_mb": 906.6,
+    "counters": {
+     "folder_scans": 937,
+     "watcher_polls": 937
+    }
+   },
+   "settings": {
+    "seconds": 2.0,
+    "cpu_py_avg": 5.4,
+    "cpu_kids_avg": 4.63,
+    "cpu_py_max": 7.71,
+    "cpu_kids_max": 9.25,
+    "ws_peak_mb": 902.1,
+    "ws_end_mb": 902.1,
+    "counters": {
+     "folder_scans": 187,
+     "watcher_polls": 187
+    },
+    "page_onDataUpdated_after_20_edits_per_instance": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     20.0
+    ]
+   },
+   "reload": {
+    "expected_reloads": 1,
+    "done": true,
+    "seconds": 2.1,
+    "counters": {
+     "folder_scans": 187,
+     "bridges_created": 1,
+     "watcher_polls": 187,
+     "load_finished": 1,
+     "watcher_events": 1,
+     "reload_calls": 1
+    },
+    "reloads_per_instance": [
+     1,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   "after_reload": {
+    "py_ws": 294.4,
+    "py_priv": 249.0,
+    "kids": 10,
+    "kids_ws": 612.4,
+    "kids_priv": 171.0,
+    "total_ws": 906.8
+   },
+   "after_close_half": {
+    "py_ws": 291.1,
+    "py_priv": 247.5,
+    "kids": 5,
+    "kids_ws": 308.5,
+    "kids_priv": 84.3,
+    "total_ws": 599.6
+   },
+   "after_remove_all": {
+    "py_ws": 284.6,
+    "py_priv": 238.0,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 284.6
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "real",
+   "n": 1,
+   "baseline": {
+    "py_ws": 285.1,
+    "py_priv": 238.7,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 285.1
+   },
+   "load_seconds": 0.4,
+   "steady_after_load": {
+    "py_ws": 297.6,
+    "py_priv": 272.0,
+    "kids": 1,
+    "kids_ws": 91.5,
+    "kids_priv": 31.7,
+    "total_ws": 389.1
+   },
+   "peak_during_load_mb": 410.3,
+   "types": {
+    "renderer": 1
+   },
+   "watchers": 1,
+   "active_timers": 1,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 2.78,
+    "cpu_kids_avg": 0.15,
+    "cpu_py_max": 6.19,
+    "cpu_kids_max": 1.55,
+    "ws_peak_mb": 389.3,
+    "ws_end_mb": 389.3,
+    "counters": {
+     "folder_scans": 94,
+     "watcher_polls": 94
+    }
+   },
+   "reload": {
+    "expected_reloads": 1,
+    "done": true,
+    "seconds": 1.7,
+    "counters": {
+     "measure_js": 1,
+     "folder_scans": 17,
+     "bridges_created": 1,
+     "watcher_polls": 16,
+     "load_finished": 1,
+     "reload_calls": 1
+    },
+    "reloads_per_instance": [
+     1
+    ]
+   },
+   "after_reload": {
+    "py_ws": 314.8,
+    "py_priv": 292.0,
+    "kids": 1,
+    "kids_ws": 102.1,
+    "kids_priv": 41.4,
+    "total_ws": 416.9
+   },
+   "after_close_half": {
+    "py_ws": 291.9,
+    "py_priv": 287.5,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 291.9
+   },
+   "after_remove_all": {
+    "py_ws": 288.5,
+    "py_priv": 282.8,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 288.5
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "real",
+   "n": 3,
+   "baseline": {
+    "py_ws": 288.8,
+    "py_priv": 283.1,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 288.8
+   },
+   "load_seconds": 1.1,
+   "steady_after_load": {
+    "py_ws": 302.8,
+    "py_priv": 301.4,
+    "kids": 3,
+    "kids_ws": 227.9,
+    "kids_priv": 70.3,
+    "total_ws": 530.7
+   },
+   "peak_during_load_mb": 531.1,
+   "types": {
+    "renderer": 3
+   },
+   "watchers": 3,
+   "active_timers": 3,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 6.02,
+    "cpu_kids_avg": 1.39,
+    "cpu_py_max": 35.62,
+    "cpu_kids_max": 13.94,
+    "ws_peak_mb": 533.3,
+    "ws_end_mb": 531.6,
+    "counters": {
+     "folder_scans": 279,
+     "watcher_polls": 279
+    }
+   },
+   "reload": {
+    "expected_reloads": 1,
+    "done": true,
+    "seconds": 1.7,
+    "counters": {
+     "measure_js": 1,
+     "folder_scans": 49,
+     "bridges_created": 1,
+     "watcher_polls": 48,
+     "load_finished": 1,
+     "reload_calls": 1
+    },
+    "reloads_per_instance": [
+     0,
+     0,
+     1
+    ]
+   },
+   "after_reload": {
+    "py_ws": 309.5,
+    "py_priv": 319.2,
+    "kids": 3,
+    "kids_ws": 232.4,
+    "kids_priv": 73.1,
+    "total_ws": 541.9
+   },
+   "after_close_half": {
+    "py_ws": 310.5,
+    "py_priv": 320.8,
+    "kids": 2,
+    "kids_ws": 154.8,
+    "kids_priv": 46.9,
+    "total_ws": 465.3
+   },
+   "after_remove_all": {
+    "py_ws": 296.6,
+    "py_priv": 305.8,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 296.6
+   },
+   "types_after": {}
+  },
+  {
+   "kind": "real",
+   "n": 10,
+   "baseline": {
+    "py_ws": 297.0,
+    "py_priv": 306.3,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 297.0
+   },
+   "load_seconds": 3.5,
+   "steady_after_load": {
+    "py_ws": 334.1,
+    "py_priv": 353.4,
+    "kids": 10,
+    "kids_ws": 772.6,
+    "kids_priv": 244.3,
+    "total_ws": 1106.8
+   },
+   "peak_during_load_mb": 1108.0,
+   "types": {
+    "renderer": 10
+   },
+   "watchers": 3,
+   "active_timers": 3,
+   "idle": {
+    "seconds": 10,
+    "cpu_py_avg": 7.4,
+    "cpu_kids_avg": 7.55,
+    "cpu_py_max": 20.04,
+    "cpu_kids_max": 37.04,
+    "ws_peak_mb": 1124.4,
+    "ws_end_mb": 1124.4,
+    "counters": {
+     "folder_scans": 281,
+     "watcher_polls": 281
+    }
+   },
+   "reload": {
+    "expected_reloads": 4,
+    "done": true,
+    "seconds": 3.1,
+    "counters": {
+     "measure_js": 1,
+     "folder_scans": 86,
+     "bridges_created": 4,
+     "watcher_polls": 85,
+     "load_finished": 4,
+     "reload_calls": 4
+    },
+    "reloads_per_instance": [
+     1,
+     0,
+     0,
+     1,
+     0,
+     0,
+     1,
+     0,
+     0,
+     1
+    ]
+   },
+   "after_reload": {
+    "py_ws": 350.1,
+    "py_priv": 373.4,
+    "kids": 10,
+    "kids_ws": 820.3,
+    "kids_priv": 284.9,
+    "total_ws": 1170.4
+   },
+   "after_close_half": {
+    "py_ws": 335.6,
+    "py_priv": 355.2,
+    "kids": 5,
+    "kids_ws": 420.2,
+    "kids_priv": 146.9,
+    "total_ws": 755.8
+   },
+   "after_remove_all": {
+    "py_ws": 326.9,
+    "py_priv": 350.2,
+    "kids": 0,
+    "kids_ws": 0.0,
+    "kids_priv": 0.0,
+    "total_ws": 326.9
+   },
+   "types_after": {}
+  }
+ ],
+ "cycles": {
+  "static": {
+   "label": "static x3 add/close/remove",
+   "per_cycle": 3,
+   "rows": [
+    {
+     "py_ws": 326.5,
+     "py_priv": 342.5,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 326.5,
+     "cycle": 1,
+     "py_objects": 37143,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 330.5,
+     "py_priv": 346.8,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 330.5,
+     "cycle": 2,
+     "py_objects": 44322,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 328.2,
+     "py_priv": 345.9,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 328.2,
+     "cycle": 3,
+     "py_objects": 44338,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 328.8,
+     "py_priv": 347.1,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 328.8,
+     "cycle": 4,
+     "py_objects": 44354,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 332.9,
+     "py_priv": 351.3,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 332.9,
+     "cycle": 5,
+     "py_objects": 44370,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 329.9,
+     "py_priv": 348.3,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 329.9,
+     "cycle": 6,
+     "py_objects": 44386,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 327.8,
+     "py_priv": 349.8,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 327.8,
+     "cycle": 7,
+     "py_objects": 44402,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 325.1,
+     "py_priv": 350.2,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 325.1,
+     "cycle": 8,
+     "py_objects": 44418,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 325.9,
+     "py_priv": 353.6,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 325.9,
+     "cycle": 9,
+     "py_objects": 44434,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 325.4,
+     "py_priv": 353.6,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 325.4,
+     "cycle": 10,
+     "py_objects": 44450,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 323.1,
+     "py_priv": 353.7,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 323.1,
+     "cycle": 11,
+     "py_objects": 44466,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 316.4,
+     "py_priv": 350.6,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 316.4,
+     "cycle": 12,
+     "py_objects": 44482,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 315.7,
+     "py_priv": 351.0,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 315.7,
+     "cycle": 13,
+     "py_objects": 44498,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 319.5,
+     "py_priv": 355.2,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 319.5,
+     "cycle": 14,
+     "py_objects": 44514,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 320.4,
+     "py_priv": 355.9,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 320.4,
+     "cycle": 15,
+     "py_objects": 44530,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 320.6,
+     "py_priv": 355.9,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 320.6,
+     "cycle": 16,
+     "py_objects": 44546,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 317.3,
+     "py_priv": 352.6,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 317.3,
+     "cycle": 17,
+     "py_objects": 44562,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 320.7,
+     "py_priv": 356.0,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 320.7,
+     "cycle": 18,
+     "py_objects": 44578,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 321.0,
+     "py_priv": 356.2,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 321.0,
+     "cycle": 19,
+     "py_objects": 44594,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 317.9,
+     "py_priv": 353.1,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 317.9,
+     "cycle": 20,
+     "py_objects": 44610,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    }
+   ],
+   "slope_per_cycle": {
+    "py_ws": -0.813,
+    "py_priv": 0.423,
+    "kids_ws": 0.0,
+    "total_ws": -0.813,
+    "py_objects": 16.0,
+    "qobject_children": 0.0,
+    "kids": 0.0
+   }
+  },
+  "real": {
+   "label": "real RSS/Basketball/SmokeClock add/close/remove",
+   "per_cycle": 3,
+   "rows": [
+    {
+     "py_ws": 319.5,
+     "py_priv": 352.9,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 319.5,
+     "cycle": 1,
+     "py_objects": 44784,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 321.6,
+     "py_priv": 355.7,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 321.6,
+     "cycle": 2,
+     "py_objects": 44801,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 320.3,
+     "py_priv": 353.0,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 320.3,
+     "cycle": 3,
+     "py_objects": 44818,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 326.1,
+     "py_priv": 360.0,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 326.1,
+     "cycle": 4,
+     "py_objects": 44835,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 327.1,
+     "py_priv": 360.8,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 327.1,
+     "cycle": 5,
+     "py_objects": 44852,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    },
+    {
+     "py_ws": 327.2,
+     "py_priv": 360.9,
+     "kids": 0,
+     "kids_ws": 0.0,
+     "kids_priv": 0.0,
+     "total_ws": 327.2,
+     "cycle": 6,
+     "py_objects": 44869,
+     "qobject_children": 292,
+     "store": 0,
+     "runtimes": 0,
+     "storage_dirs": 0
+    }
+   ],
+   "slope_per_cycle": {
+    "py_ws": 1.737,
+    "py_priv": 1.78,
+    "kids_ws": 0.0,
+    "total_ws": 1.737,
+    "py_objects": 17.0,
+    "qobject_children": 0.0,
+    "kids": 0.0
+   }
+  }
+ },
+ "final": {
+  "mem_after_all_removed": {
+   "py_ws": 323.8,
+   "py_priv": 360.9,
+   "kids": 0,
+   "kids_ws": 0.0,
+   "kids_priv": 0.0,
+   "total_ws": 323.8
+  },
+  "types_after_all_removed": {},
+  "counters_total": {
+   "measure_js": 435,
+   "runtimes_created": 120,
+   "folder_scans": 6346,
+   "bridges_created": 143,
+   "watcher_polls": 6281,
+   "load_finished": 143,
+   "backend_set_data": 120,
+   "watcher_events": 6,
+   "reload_calls": 23,
+   "runtimes_disposed": 120
+  },
+  "runtimes": 0,
+  "watchers": 0,
+  "mem_after_shutdown": {
+   "py_ws": 323.3,
+   "py_priv": 360.9,
+   "kids": 0,
+   "kids_ws": 0.0,
+   "kids_priv": 0.0,
+   "total_ws": 323.3
+  },
+  "types_after_shutdown": {}
+ },
+ "baseline_no_instance": {
+  "seconds": 10,
+  "cpu_py_avg": 1.7,
+  "cpu_kids_avg": 0.0,
+  "cpu_py_max": 3.1,
+  "cpu_kids_max": 0.0,
+  "ws_peak_mb": 127.0,
+  "ws_end_mb": 126.1,
+  "counters": {},
+  "mem": {
+   "py_ws": 126.1,
+   "py_priv": 90.3,
+   "kids": 0,
+   "kids_ws": 0.0,
+   "kids_priv": 0.0,
+   "total_ws": 126.1
+  }
+ }
+}

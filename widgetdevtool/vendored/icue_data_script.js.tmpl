@@ -1,0 +1,157 @@
+
+SCRIPT_VARIABLES_DECLARATION
+// Names of the variables that were declared above when this script was
+// generated. Used by applyData() to detect data keys that appeared later
+// (after this script was already injected/running) and were therefore
+// never declared as top-level variables.
+let tick_offset = 0;
+let tick_start = Date.now();
+let iCUE_initialized = false;
+let uniqueId = SCRIPT_UNIQUE_ID;
+
+SCRIPT_PLUGINS_VARIABLES_DECLARATION
+
+let _initFuncs = {};
+
+let icueEvents = {
+	"onDataUpdated": null,
+	"onICUEInitialized": null,
+	"onUpdateRequested": null
+};
+
+function updateTick(value) {
+	tick_offset = value;
+	tick_start = Date.now();
+}
+
+function tick() {
+	return Date.now() - tick_start + tick_offset;
+}
+
+function applyData(data) {
+	for (const key in data) {
+		window[key] = data[key];
+	}
+
+	if (iCUE_initialized && typeof icueEvents.onDataUpdated === 'function') {
+		icueEvents.onDataUpdated();
+	}
+}
+
+function requestUpdate() {
+	if (iCUE_initialized && typeof icueEvents.onUpdateRequested === 'function') {
+		icueEvents.onUpdateRequested();
+	}
+}
+
+// Store channel reference globally
+window.icueChannel = null;
+
+new QWebChannel(qt.webChannelTransport, function(channel) {
+	window.icueChannel = channel;
+
+	applyData(channel.objects.SCRIPT_WEBCHANNEL_ID.data);
+	channel.objects.SCRIPT_WEBCHANNEL_ID.dataChanged.connect(applyData);
+	channel.objects.SCRIPT_WEBCHANNEL_ID.updateRequested.connect(requestUpdate);
+
+	updateTick(channel.objects.SCRIPT_WEBCHANNEL_ID.tick);
+
+	if (typeof window.tr !== 'function') {
+		window.tr = function(s) { return channel.objects.SCRIPT_WEBCHANNEL_ID.tr(s); };
+	}
+	if (!window.iCUE) {
+		window.iCUE = channel.objects.SCRIPT_WEBCHANNEL_ID.iCUEGlobalObject;
+	}
+	if (typeof window.pathToMacrosFormat !== 'function') {
+		window.pathToMacrosFormat = function(path) { return channel.objects.SCRIPT_WEBCHANNEL_ID.pathToMacrosFormat(path); };
+	}
+	if (typeof window.resourcePath !== 'function') {
+		window.resourcePath = function(path) { return channel.objects.SCRIPT_WEBCHANNEL_ID.resourcePath(path); };
+	}
+
+	if (!window.device && channel.objects.SCRIPT_WEBCHANNEL_ID.deviceModel) {
+		window.device = channel.objects.SCRIPT_WEBCHANNEL_ID.deviceModel;
+	}
+
+	SCRIPT_PLUGINS_INITIALIZATION
+
+	// Dispatch event to notify that channel is ready
+	document.dispatchEvent(new Event('icue-channel-ready'));
+});
+
+// Initialize after both channel and DOM are ready
+{
+	let channelReady = false;
+	let domReady = false;
+
+	function _tryInitPlugins() {
+		if (Object.keys(_initFuncs).length === 0) {
+			return;
+		}
+		Object.entries(_initFuncs).forEach(([key, fn]) => {
+			fn();
+			delete _initFuncs[key];
+		});
+	}
+
+	function tryInit() {
+		if (!channelReady || !domReady) {
+			return;
+		}
+		if (iCUE_initialized) {
+			return;
+		}
+
+		let channel = window.icueChannel;
+		if (!channel) {
+			console.error("HtmlDataProvider: icueChannel is null");
+			return;
+		}
+
+		function doInit() {
+			if (iCUE_initialized) {
+				return;
+			}
+			iCUE_initialized = true;
+
+			if (typeof icueEvents.onICUEInitialized === 'function') {
+				icueEvents.onICUEInitialized();
+			} else {
+				console.log("HtmlDataProvider: onICUEInitialized is not defined by widget");
+			}
+
+			_tryInitPlugins();
+
+			if (typeof icueEvents.onDataUpdated === 'function') {
+				icueEvents.onDataUpdated();
+			}
+		}
+
+		channel.objects.SCRIPT_WEBCHANNEL_ID.isInitialized().then(function(isInitialized) {
+			if (isInitialized) {
+				doInit();
+			}
+		});
+
+		channel.objects.SCRIPT_WEBCHANNEL_ID.initialized.connect(function() {
+			doInit();
+		});
+	}
+
+	document.addEventListener('icue-channel-ready', function() {
+		channelReady = true;
+		tryInit();
+	});
+
+	document.addEventListener('DOMContentLoaded', function() {
+		domReady = true;
+		tryInit();
+		_tryInitPlugins();
+	});
+
+	// Fallback: check if channel is already ready (event may have fired before listener was added)
+	if (window.icueChannel) {
+		channelReady = true;
+		tryInit();
+	}
+}

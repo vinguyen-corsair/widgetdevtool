@@ -1,0 +1,156 @@
+{
+ "parse": {
+  "default": [],
+  "defaultSensorId": "00000000-0000-4000-8000-mock00000001",
+  "notes": [],
+  "valid": true
+ },
+ "console_notices": [
+  "plugins.Sensorsdataprovider in the settings parser: WidgetDevTool MOCK (values from the mock catalog, not this PC)",
+  "plugin Sensorsdataprovider: MOCK sensors (WidgetDevTool catalog, not this PC's hardware; see the Sensors tab)",
+  "HtmlDataProvider: Setting permissions model for plugin Sensorsdataprovider undefined"
+ ],
+ "errors": [],
+ "initial": {
+  "showBar": "true",
+  "showRowBackground": "true",
+  "state": "Select sensors in the widget settings. fjkahsdjkfhjákdfjksadhfjksdjkfh",
+  "stateHidden": false,
+  "rows": [],
+  "dashTexts": []
+ },
+ "editor_supported": true,
+ "stored": [
+  {
+   "sensorId": "00000000-0000-4000-8000-mock00000001",
+   "color": "#f08e33"
+  },
+  {
+   "sensorId": "00000000-0000-4000-8000-mock00000004",
+   "color": "#f08e33"
+  }
+ ],
+ "bar_on": {
+  "showBar": "true",
+  "showRowBackground": "true",
+  "state": "",
+  "stateHidden": true,
+  "rows": [
+   {
+    "device": "MOCK CPU",
+    "label": "CPU Package",
+    "value": "45.3 °C",
+    "barDisplay": "block",
+    "barRect": [
+     267,
+     18
+    ],
+    "metaAfter": {
+     "content": "none",
+     "borderTop": "0px none",
+     "width": "auto"
+    }
+   },
+   {
+    "device": "MOCK GPU",
+    "label": "GPU Load",
+    "value": "61.0 %",
+    "barDisplay": "block",
+    "barRect": [
+     267,
+     18
+    ],
+    "metaAfter": {
+     "content": "none",
+     "borderTop": "0px none",
+     "width": "auto"
+    }
+   }
+  ],
+  "dashTexts": []
+ },
+ "stored_showBar": false,
+ "bar_off": {
+  "showBar": "false",
+  "showRowBackground": "true",
+  "state": "",
+  "stateHidden": true,
+  "rows": [
+   {
+    "device": "MOCK CPU",
+    "label": "CPU Package",
+    "value": "45.3 °C",
+    "barDisplay": "none",
+    "barRect": [
+     0,
+     0
+    ],
+    "metaAfter": {
+     "content": "none",
+     "borderTop": "0px none",
+     "width": "auto"
+    }
+   },
+   {
+    "device": "MOCK GPU",
+    "label": "GPU Load",
+    "value": "61.0 %",
+    "barDisplay": "none",
+    "barRect": [
+     0,
+     0
+    ],
+    "metaAfter": {
+     "content": "none",
+     "borderTop": "0px none",
+     "width": "auto"
+    }
+   }
+  ],
+  "dashTexts": []
+ },
+ "bar_off_rowbg_off": {
+  "showBar": "false",
+  "showRowBackground": "false",
+  "state": "",
+  "stateHidden": true,
+  "rows": [
+   {
+    "device": "MOCK CPU",
+    "label": "CPU Package",
+    "value": "45.3 °C",
+    "barDisplay": "none",
+    "barRect": [
+     0,
+     0
+    ],
+    "metaAfter": {
+     "content": "\"\"",
+     "borderTop": "1px solid",
+     "width": "16px"
+    }
+   },
+   {
+    "device": "MOCK GPU",
+    "label": "GPU Load",
+    "value": "61.0 %",
+    "barDisplay": "none",
+    "barRect": [
+     0,
+     0
+    ],
+    "metaAfter": {
+     "content": "\"\"",
+     "borderTop": "1px solid",
+     "width": "16px"
+    }
+   }
+  ],
+  "dashTexts": []
+ },
+ "after_value_change": [
+  "77.7 °C",
+  "61.0 %"
+ ],
+ "errors_end": []
+}

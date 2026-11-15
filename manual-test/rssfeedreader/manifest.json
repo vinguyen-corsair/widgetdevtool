@@ -1,0 +1,19 @@
+{
+  "author": "shocksim",
+  "id": "com.shocksim.rssfeedreader",
+  "name": "RSS Feeder",
+  "description": "Multi-feed RSS reader with tab switching, thumbnail support, and glassmorphism design.",
+  "version": "2.0.5",
+  "preview_icon": "resources/rssfeedreader.svg",
+  "min_framework_version": "1.0.0",
+  "os": [
+    { "platform": "windows" }
+  ],
+  "supported_devices": [
+    { "type": "dashboard_lcd", "features": ["sensor-screen"] }
+  ],
+  "interactive": true,
+  "required_plugins": [
+    "widgetbuilder.linkprovider:Url:1.0"
+  ]
+}

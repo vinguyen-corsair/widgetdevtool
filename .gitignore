@@ -1,0 +1,22 @@
+# Python virtual environment (recreate with: python -m venv .venv; .venv\Scripts\pip install -r requirements.txt)
+.venv/
+venv/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Generated widget packages
+*.icuewidget
+
+# OS / editor files
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/

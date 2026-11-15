@@ -1,0 +1,5 @@
+Extracted 2026-11-12 from:
+  D:\icue\Application\src\qml\com\corsair\cue\htmlwidgets\src\HtmlDataProvider.cpp
+  iCUE repo branch=v5.55 commit=3b8f69966d92e433a36fdbc9a476069f003e9641
+Templates: cScriptTemplate, and the two raw strings of HtmlDataProvider::pluginCodeFromChannelId.
+NOTE: this is the 5.5x development source. The installed release is 5.52.93; the templates there are UNVERIFIED to match.

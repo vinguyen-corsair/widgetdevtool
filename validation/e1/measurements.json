@@ -1,0 +1,496 @@
+{
+ "S1": {
+  "widgets_found": 39,
+  "xeneon_profile": "dash_accessory_lcd",
+  "selected": true,
+  "entry": "RSS Feeder",
+  "group": "None",
+  "open": true,
+  "state": "LOADED",
+  "window_title": "iCUE Widget Dev Tool (POC v0.4)"
+ },
+ "S2": {
+  "editors": 18,
+  "keys": [
+   "accentColor1",
+   "accentColor2",
+   "accentColor3",
+   "accentColor4",
+   "accentColor5",
+   "backgroundColor",
+   "backgroundMedia",
+   "bgBrightness",
+   "feedUrl1",
+   "feedUrl2",
+   "feedUrl3",
+   "feedUrl4",
+   "feedUrl5",
+   "fontFamily",
+   "glassBlur",
+   "refreshMinutes",
+   "textColor",
+   "transparency"
+  ],
+  "unsupported": {
+   "backgroundMedia": "needs the iCUE media assets controller (library, crop, position) - not implemented"
+  },
+  "instance_keys": [
+   "accentColor1",
+   "accentColor2",
+   "accentColor3",
+   "accentColor4",
+   "accentColor5",
+   "backgroundColor",
+   "backgroundMedia",
+   "bgBrightness",
+   "feedUrl1",
+   "feedUrl2",
+   "feedUrl3",
+   "feedUrl4",
+   "feedUrl5",
+   "fontFamily",
+   "glassBlur",
+   "refreshMinutes",
+   "textColor",
+   "transparency",
+   "widgetPersonalizationCustomStylePresent"
+  ],
+  "type_id": "com.shocksim.rssfeedreader",
+  "name": "RSS Feeder",
+  "source_version": "2.0.5",
+  "groups": [
+   "RSS Feeds",
+   "Widget Personalization"
+  ],
+  "vs_icue_keys": {
+   "only_in_icue": [
+    "widgetPersonalizationCustomStyleEnabled"
+   ],
+   "only_in_tool": []
+  },
+  "icue_decoded": {
+   "accentColor1": [
+    "QColor",
+    "#b8ce00"
+   ],
+   "accentColor2": [
+    "QColor",
+    "#6b679f"
+   ],
+   "accentColor3": [
+    "QColor",
+    "#a62d00"
+   ],
+   "accentColor4": [
+    "QColor",
+    "#b98d00"
+   ],
+   "accentColor5": [
+    "QColor",
+    "#c7be00"
+   ],
+   "backgroundColor": [
+    "QColor",
+    "#71028f"
+   ],
+   "backgroundMedia": [
+    "dict",
+    {}
+   ],
+   "bgBrightness": [
+    "float",
+    100.0
+   ],
+   "feedUrl1": [
+    "str",
+    "<url>"
+   ],
+   "feedUrl2": [
+    "str",
+    "<url>"
+   ],
+   "feedUrl3": [
+    "str",
+    "<url>"
+   ],
+   "feedUrl4": [
+    "str",
+    ""
+   ],
+   "feedUrl5": [
+    "str",
+    ""
+   ],
+   "fontFamily": [
+    "str",
+    ""
+   ],
+   "glassBlur": [
+    "float",
+    0.0
+   ],
+   "refreshMinutes": [
+    "float",
+    10.0
+   ],
+   "textColor": [
+    "QColor",
+    "#e3bf00"
+   ],
+   "transparency": [
+    "float",
+    89.0
+   ],
+   "widgetPersonalizationCustomStyleEnabled": [
+    "bool",
+    true
+   ],
+   "widgetPersonalizationCustomStylePresent": [
+    "bool",
+    true
+   ]
+  },
+  "tool_defaults_types": {
+   "feedUrl1": [
+    "str",
+    "<url>"
+   ],
+   "feedUrl2": [
+    "str",
+    "<url>"
+   ],
+   "feedUrl3": [
+    "str",
+    "<url>"
+   ],
+   "feedUrl4": [
+    "str",
+    ""
+   ],
+   "feedUrl5": [
+    "str",
+    ""
+   ],
+   "refreshMinutes": [
+    "float",
+    10.0
+   ],
+   "textColor": [
+    "str",
+    "#f6f8ff"
+   ],
+   "backgroundColor": [
+    "str",
+    "#071019"
+   ],
+   "backgroundMedia": [
+    "dict",
+    {
+     "pathToAsset": "",
+     "scale": 1.0,
+     "positionX": 0.0,
+     "positionY": 0.0,
+     "angle": 0
+    }
+   ],
+   "bgBrightness": [
+    "float",
+    100.0
+   ],
+   "glassBlur": [
+    "float",
+    0.0
+   ],
+   "transparency": [
+    "float",
+    92.0
+   ],
+   "fontFamily": [
+    "str",
+    ""
+   ],
+   "accentColor1": [
+    "str",
+    "#5b8cff"
+   ],
+   "accentColor2": [
+    "str",
+    "#26b67a"
+   ],
+   "accentColor3": [
+    "str",
+    "#e7a94b"
+   ],
+   "accentColor4": [
+    "str",
+    "#f06e63"
+   ],
+   "accentColor5": [
+    "str",
+    "#7c7bff"
+   ],
+   "widgetPersonalizationCustomStylePresent": [
+    "bool",
+    true
+   ]
+  }
+ },
+ "S3": {
+  "has_custom_style_switch": true,
+  "custom_style_off_textColor_page": "#ffffff",
+  "custom_style_on_textColor_page": "#f6f8ff",
+  "instance_textColor_raw": "#f6f8ff"
+ },
+ "S4": [
+  {
+   "size": "SizeS",
+   "ori": "landscape",
+   "viewport": [
+    315,
+    129
+   ],
+   "page": [
+    315,
+    129,
+    1
+   ],
+   "zoom": 1.0,
+   "view_px": [
+    315,
+    129
+   ]
+  },
+  {
+   "size": "SizeS",
+   "ori": "portrait",
+   "viewport": [
+    261,
+    156
+   ],
+   "page": [
+    261,
+    156,
+    1
+   ],
+   "zoom": 1.0,
+   "view_px": [
+    261,
+    156
+   ]
+  },
+  {
+   "size": "SizeM",
+   "ori": "landscape",
+   "viewport": [
+    315,
+    261
+   ],
+   "page": [
+    315,
+    261,
+    1
+   ],
+   "zoom": 1.0,
+   "view_px": [
+    315,
+    261
+   ]
+  },
+  {
+   "size": "SizeM",
+   "ori": "portrait",
+   "viewport": [
+    261,
+    315
+   ],
+   "page": [
+    261,
+    315,
+    1
+   ],
+   "zoom": 1.0,
+   "view_px": [
+    261,
+    315
+   ]
+  },
+  {
+   "size": "SizeL",
+   "ori": "landscape",
+   "viewport": [
+    633,
+    261
+   ],
+   "page": [
+    633,
+    261,
+    1
+   ],
+   "zoom": 1.0,
+   "view_px": [
+    633,
+    261
+   ]
+  },
+  {
+   "size": "SizeL",
+   "ori": "portrait",
+   "viewport": [
+    261,
+    633
+   ],
+   "page": [
+    261,
+    633,
+    0.6666666865348816
+   ],
+   "zoom": 0.6667,
+   "view_px": [
+    174,
+    422
+   ]
+  },
+  {
+   "size": "SizeXL",
+   "ori": "landscape",
+   "viewport": [
+    951,
+    261
+   ],
+   "page": [
+    951,
+    261,
+    1
+   ],
+   "zoom": 1.0,
+   "view_px": [
+    951,
+    261
+   ]
+  },
+  {
+   "size": "SizeXL",
+   "ori": "portrait",
+   "viewport": [
+    261,
+    951
+   ],
+   "page": [
+    260,
+    951,
+    0.5678233504295349
+   ],
+   "zoom": 0.5678,
+   "view_px": [
+    148,
+    540
+   ]
+  },
+  {
+   "note": "scale 100%",
+   "page": [
+    315,
+    129,
+    1
+   ],
+   "zoom": 1.0
+  }
+ ],
+ "S4_shots": "C:\\Users\\SWTest\\AppData\\Local\\Temp\\wdt_e1_s4.png",
+ "S7": {
+  "counts": {
+   "info": 3,
+   "warning": 0,
+   "error": 0
+  },
+  "widget_errors": [],
+  "widget_warnings": [],
+  "bridge_notices": [
+   "plugin Linkprovider: MOCK only (recording stand-in, not the real plugin)"
+  ],
+  "ls_keys": [
+   "{b49b3bb2-3903-4b88-8e98-52d1d82a63ba}"
+  ],
+  "uniqueId": "{b49b3bb2-3903-4b88-8e98-52d1d82a63ba}",
+  "initialized": true,
+  "page_state": {
+   "title": "tr('RSS Feed Reader')",
+   "bodyChildren": 2,
+   "text": "NYT > World News\nrss.nytimes.com - 15 stories\nFeed 2\nsearch.cnbc.com\nFeed 3\nwired.com\nIn Moscow, Witkoff and Kushner Ask Putin to Include Europe in Peace Talks\n"
+  }
+ },
+ "S5": {
+  "css_reload": true,
+  "reload_count": 1,
+  "outline": "solid",
+  "user_value_kept": [
+   7
+  ],
+  "before": [
+   7
+  ],
+  "same_instance_id": true,
+  "after_js_syntax_error": {
+   "reload_count": 2,
+   "state": "LOADED",
+   "widget_errors": [
+    "Uncaught SyntaxError: Unexpected identifier 'error'"
+   ]
+  },
+  "after_fix": {
+   "reload_count": 3,
+   "state": "LOADED",
+   "user_value_kept": [
+    7
+   ]
+  }
+ },
+ "S6": {
+  "ids_differ": true,
+  "a": [
+   "https://example.invalid/a.xml",
+   11,
+   "{9e8ffe68-77e5-4597-a984-ca07a5810854}"
+  ],
+  "b": [
+   "https://example.invalid/b.xml",
+   22,
+   "{08fc7753-5753-4d91-97bd-4f0220c97ebd}"
+  ],
+  "a_ls": [],
+  "b_ls": [],
+  "visible": [
+   false,
+   true
+  ],
+  "a_ls_blob_keys": {},
+  "restored": 4,
+  "after_restart": [
+   {
+    "marker": "A",
+    "keys": [
+     "e1_marker"
+    ],
+    "feedUrl1": "https://example.invalid/a.xml",
+    "refresh": 11.0
+   },
+   {
+    "marker": "B",
+    "keys": [
+     "e1_marker"
+    ],
+    "feedUrl1": "https://example.invalid/b.xml",
+    "refresh": 22.0
+   }
+  ],
+  "ls_keys_before_restart": [
+   [
+    "e1_marker"
+   ],
+   [
+    "e1_marker"
+   ]
+  ]
+ },
+ "shots": "C:\\Users\\SWTest\\AppData\\Local\\Temp\\wdt_e1_s6.png"
+}

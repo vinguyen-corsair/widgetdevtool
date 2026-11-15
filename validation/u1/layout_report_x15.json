@@ -1,0 +1,139 @@
+{
+ "default_size": [
+  1280,
+  840
+ ],
+ "minimum": [
+  900,
+  600
+ ],
+ "min_hint": [
+  809,
+  398
+ ],
+ "default": {
+  "heights": [
+   18,
+   24,
+   34
+  ],
+  "issues": [],
+  "frame": [
+   720,
+   363
+  ]
+ },
+ "sizes": {
+  "size_items": [
+   [
+    "S",
+    true
+   ],
+   [
+    "M",
+    true
+   ],
+   [
+    "L",
+    true
+   ],
+   [
+    "XL",
+    true
+   ]
+  ],
+  "orientation": [
+   [
+    "Landscape",
+    true
+   ],
+   [
+    "Portrait",
+    true
+   ]
+  ],
+  "scale": [
+   "Native 1:1",
+   "Visual Fit (Experimental)",
+   "89% zoom (Experimental)",
+   "78% zoom (Experimental)",
+   "67% zoom (Experimental)",
+   "56% zoom (Experimental)",
+   "44% zoom (Experimental)",
+   "33% zoom (Experimental)"
+  ]
+ },
+ "collapsed_frame": [
+  720,
+  495
+ ],
+ "expanded_frame": [
+  720,
+  363
+ ],
+ "taiga_sizes": [
+  [
+   "S",
+   true
+  ],
+  [
+   "M",
+   true
+  ],
+  [
+   "L",
+   false
+  ],
+  [
+   "XL",
+   false
+  ]
+ ],
+ "min": {
+  "heights": [
+   18,
+   24,
+   34
+  ],
+  "issues": [],
+  "size": [
+   900,
+   600
+  ],
+  "frame": [
+   411,
+   120
+  ],
+  "toolbar_height": 114
+ },
+ "max": {
+  "heights": [
+   18,
+   24,
+   34
+  ],
+  "issues": [],
+  "size": [
+   1707,
+   913
+  ],
+  "frame": [
+   1147,
+   436
+  ]
+ },
+ "dialog": {
+  "heights": [
+   34
+  ],
+  "issues": []
+ },
+ "dialog_legacy": {
+  "heights": [
+   17,
+   18,
+   34
+  ],
+  "issues": []
+ }
+}

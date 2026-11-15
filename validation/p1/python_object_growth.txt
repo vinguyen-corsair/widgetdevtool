@@ -1,0 +1,11 @@
+objects 36019 -> 36171
+  +162 ReferenceType
+  +7 set
+  +6 builtin_function_or_method
+  +1 Counter
+  new callable: 7 ('cell', '?')
+  new callable: 1 ('function', 'MainWindow._watch.<locals>.<lambda>')
+  new callable: 1 ('function', 'SettingEditor._build_textfield.<locals>.<lambda>')
+  new callable: 1 ('function', 'SettingEditor._build_textfield.<locals>.apply')
+  new callable: 1 ('function', 'SettingEditor._build_slider.<locals>.<lambda>')
+  new callable: 1 ('function', 'SettingEditor._build_slider.<locals>.apply')
