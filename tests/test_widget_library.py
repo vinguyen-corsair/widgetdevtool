@@ -28,13 +28,14 @@ from test_runtime_bridge import PageTestCase  # noqa: E402
 from test_settings_panel import BASKETBALL, RSS, SMOKECLOCK, classify_console_error  # noqa: E402
 from widgetdevtool.device_profiles import load_profiles  # noqa: E402
 from widgetdevtool.viewport import NATIVE  # noqa: E402
+from widgetdevtool.paths import ICUE_DIR, WIDGETS_DIR  # noqa: E402
 from widgetdevtool.icue_theme import DEFAULT_ICON_FILE, PALETTE_FILE, PALETTE_SOURCE, load_palette  # noqa: E402
 from widgetdevtool.thumbnails import analyze, render_preview_tile, render_type_tile  # noqa: E402
 from widgetdevtool.widget_library import (  # noqa: E402
     SRC_DEFAULT, SRC_ICON, SRC_NONE, SRC_PREVIEW, build_groups, load_entry, parse_head, scan_library, support_reason)
 
-WIDGETS = Path(r"D:\Widgets\WidgetsXE")
-ICUE = Path(r"D:\icue")
+WIDGETS = WIDGETS_DIR
+ICUE = ICUE_DIR
 PROFILES = {p.id: p for p in load_profiles()}
 EDGE, LINK, PUMP, KEYBOARD = (PROFILES[k] for k in ("dash_accessory_lcd", "link_generic_lcd", "cooler_pump_lcd", "vanguard_96"))
 PAL = {k: QColor(v) for k, v in load_palette().items()}

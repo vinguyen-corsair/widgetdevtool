@@ -11,7 +11,7 @@ Source (iCUE v5.55, NOT verified against release 5.52.93 / 5.46.67):
 
 No size is written by hand here: profiles are generated from the manifests (`generate`) into profiles/device_profiles.json,
 which the tool loads at run time (it needs no iCUE checkout).
-Run:  .venv\Scripts\python.exe -m widgetdevtool.device_profiles generate [--icue D:\icue] [--out FILE]
+Run:  .venv\Scripts\python.exe -m widgetdevtool.device_profiles generate [--icue DIR]  (default: widgetdevtool.paths.ICUE_DIR) [--out FILE]
 """
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
+from .paths import ICUE_DIR
 from typing import Any
 
 SIZE_ORDER = ("SizeS", "SizeM", "SizeL", "SizeXL")
@@ -237,7 +238,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="widgetdevtool.device_profiles")
     sub = parser.add_subparsers(dest="cmd", required=True)
     gen = sub.add_parser("generate", help="read the .cuemsf manifests of an iCUE checkout and write the profiles file")
-    gen.add_argument("--icue", default=r"D:\icue")
+    gen.add_argument("--icue", default=str(ICUE_DIR))
     gen.add_argument("--out", default=str(PROFILES_FILE))
     args = parser.parse_args(argv)
     doc = generate_profiles(args.icue)

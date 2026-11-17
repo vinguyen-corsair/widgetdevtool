@@ -7,7 +7,7 @@ Source (iCUE v5.55, NOT verified against release 5.52.93 / 5.46.67):
   (the file sits in qml/com/corsair/cue/cuestyle/icons/screeneffects/web-url.svg).
 `generate` writes profiles/palette.json (colours, source line, sha256) and copies the icon to assets/web-url.svg; the tool loads
 those two files at run time and needs no iCUE checkout.
-Run:  .venv\Scripts\python.exe -m widgetdevtool.icue_theme generate [--icue D:\icue]
+Run:  .venv\Scripts\python.exe -m widgetdevtool.icue_theme generate [--icue DIR]  (default: widgetdevtool.paths.ICUE_DIR)
 """
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
+from .paths import ICUE_DIR
 
 PALETTE_FILE = Path(__file__).parent / "profiles" / "palette.json"
 DEFAULT_ICON_FILE = Path(__file__).parent / "assets" / "web-url.svg"
@@ -63,7 +64,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="widgetdevtool.icue_theme")
     sub = parser.add_subparsers(dest="cmd", required=True)
     gen = sub.add_parser("generate", help="read CuePalette.cpp and the default icon of an iCUE checkout")
-    gen.add_argument("--icue", default=r"D:\icue")
+    gen.add_argument("--icue", default=str(ICUE_DIR))
     args = parser.parse_args(argv)
     doc = generate(args.icue)
     print(f"palette: {len(doc['colors'])} colours; layer1={doc['colors']['layer1']} layer5={doc['colors']['layer5']} "

@@ -24,6 +24,7 @@ from PySide6.QtWebSockets import QWebSocketServer  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
 from widgetdevtool.console_log import ConsoleLog  # noqa: E402
+from widgetdevtool.paths import WIDGETS_DIR  # noqa: E402
 from widgetdevtool.olympus_hub import (  # noqa: E402
     MEASUREMENT_IMPERIAL, MEASUREMENT_METRIC, OlympusHubSource, widget_kind, widget_type, widget_units, widget_value)
 from widgetdevtool.sensor_source import sources  # noqa: E402
@@ -488,7 +489,7 @@ class PanelLiveTests(HubTestCase):
 
 
 def _sensorbar_folder() -> Path:
-    return Path(r"D:\Widgets\WidgetsXE") / "Sensor Bar" / "widget" / "sensorbar"
+    return WIDGETS_DIR / "Sensor Bar" / "widget" / "sensorbar"
 
 
 @unittest.skipUnless(_sensorbar_folder().is_dir(), "WidgetsXE Sensor Bar not present")

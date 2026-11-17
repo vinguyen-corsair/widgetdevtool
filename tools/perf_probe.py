@@ -172,7 +172,7 @@ STATIC_HTML = """<!doctype html><html><head><title>Probe</title>
 <meta name="x-icue-property" content="level" data-type="slider" data-default="5" data-min="0" data-max="10" data-step="1">
 <script>window.__updates = 0; icueEvents = { onICUEInitialized: function () {}, onDataUpdated: function () { window.__updates++; } };</script>
 </head><body>static probe widget</body></html>"""
-WIDGETS = Path(r"D:\Widgets\WidgetsXE")
+from widgetdevtool.paths import WIDGETS_DIR as WIDGETS  # noqa: E402
 REAL = [WIDGETS / "RSS Feed Reader" / "widget" / "rssfeedreader", WIDGETS / "Basketball Scores" / "widget" / "basketballscores",
         WIDGETS / "SmokeClock" / "widget" / "smokeclock"]
 COUNTS: dict[str, int] = {}

@@ -5,44 +5,57 @@ Standalone previewer for iCUE HTML widgets. Python 3.13 + PySide6 6.9.3
 
 ## Run
 
-Dung venv rieng, khong can kich hoat va khong dung Python he thong:
+Use the tool's own venv (no activation needed, the system Python is not used):
 
-    cd D:\WidgetDevTool
+    cd C:\Work\widgets\widgetdevtool
     .venv\Scripts\python.exe -m widgetdevtool
-    .venv\Scripts\python.exe -m widgetdevtool "D:\Widgets\WidgetsXE\RSS Feed Reader\widget\rssfeedreader"
+    .venv\Scripts\python.exe -m widgetdevtool "C:\Work\widgets\WidgetsXE\RSS Feed Reader\widget\rssfeedreader"
 
-Bam **Open widget folder...** de chon thu muc co `manifest.json` va `index.html`.
-Widget nap truc tiep bang `file://` (khong dong goi `.icuewidget`, khong import).
-Panel duoi cung hien JavaScript console: log, loi chua bat (uncaught) va ghi chu cua bridge (nguon `bridge`).
+Click **Open widget folder...** and choose a folder that contains `manifest.json` and `index.html`.
+The widget is loaded directly from `file://` (no `.icuewidget` packaging, no import).
+The bottom panel is the JavaScript console: logs, uncaught errors and bridge notes (source `bridge`).
+
+## External source trees
+
+The tool and its tests read (never write) the iCUE 5 source and the WidgetsXE checkout. Their locations are defined once in
+`widgetdevtool/paths.py` and can be overridden per machine with environment variables:
+
+| Variable | Default | Used by |
+|---|---|---|
+| `WIDGETDEVTOOL_ICUE_DIR` | `C:\Work\reference\icue` | `device_profiles generate`, `icue_theme generate`, `tools/vendor_icue_templates.py`, freshness tests |
+| `WIDGETDEVTOOL_WIDGETS_DIR` | `C:\Work\widgets\WidgetsXE` | real-widget tests, `tools/perf_probe.py` |
+
+Tests that need a tree are skipped when it does not exist.
 
 ## Test
 
     .venv\Scripts\python.exe -m unittest discover -s tests -v
 
-Headless (offscreen), khong can iCUE, Olympus hay thiet bi that. Test RSS Feeder tu bo qua neu
-thu muc WidgetsXE khong ton tai. Luu y: widget RSS Feeder that su goi mang toi cac feed.
+Headless (offscreen); no iCUE, Olympus or real device needed. Real-widget tests are skipped when the WidgetsXE
+folder does not exist. Note: the RSS Feeder widget really fetches its feeds over the network.
 
 ## Runtime bridge v0.2
 
-Co (dua tren `HtmlDataProvider.cpp` cua iCUE source v5.55, **chua doi chieu voi ban 5.52.93 da cai**):
+Based on `HtmlDataProvider.cpp` of the iCUE source v5.55 (**not yet compared with the installed 5.52.93 release**):
 
-- Template script lay nguyen van tu iCUE (`widgetdevtool/vendored/`, nguon trong `SOURCE.txt`;
-  nap lai bang `tools/vendor_icue_templates.py`).
-- Globals: `iCUE`, `iCUE_initialized`, `icueEvents`, `tr()` (tra ve Promise nhu iCUE), `uniqueId`,
-  `tick()`, widget properties dang `window.<ten>`.
+- Script templates copied verbatim from iCUE (`widgetdevtool/vendored/`, origin in `SOURCE.txt`;
+  refresh with `tools/vendor_icue_templates.py`).
+- Globals: `iCUE`, `iCUE_initialized`, `icueEvents`, `tr()` (returns a Promise, as in iCUE), `uniqueId`,
+  `tick()`, widget properties as `window.<name>`.
 - Lifecycle: WebChannel ready -> DOMContentLoaded -> `onICUEInitialized` -> `onDataUpdated`.
-- Properties: gia tri mac dinh tinh tu `<meta name="x-icue-property">` theo `HtmlParser.cpp`.
-- Plugin `widgetbuilder.linkprovider`: **mock chi ghi nhan** `open(url)` (khong mo trinh duyet).
+- Properties: default values computed from `<meta name="x-icue-property">` following `HtmlParser.cpp`.
+- Plugin `widgetbuilder.linkprovider`: **record-only mock** of `open(url)` (no browser is opened).
 
-## Chua mo phong (khong phai bug)
+## Not simulated (not bugs)
 
-- Plugin khac (Sensors, Media, StreamDeck...): duoc bao trong console, `window.plugins.<X>` la `undefined`.
-- `device`, permissions, `pathToMacrosFormat`/`resourcePath`, timezone/locale cua `iCUE.*`,
-  focus/touch interception, nghia that cua `tick`, settings editor.
-- Gia tri mau (`color`) la gia thuyet (`#rrggbb`); key khong co default (vd `media-selector`) de `undefined` (chua xac minh).
-- Chua co DevTools (hot reload, settings editor va device viewport: xem cac muc rieng ben duoi).
-- Mock **khong tuong duong** plugin that. Trang render hoac console sach **khong chung minh** widget dung.
-- `runJavaScript()` cua PySide6 6.9.3 tra ve chuoi rong cho array/object: test dung `JSON.stringify`.
+- Other plugins (Media, StreamDeck...): reported in the console, `window.plugins.<X>` is `undefined`.
+  (Sensors is mocked, see "Sensors provider MOCK" and "Live Sensors" below.)
+- `device`, permissions, `pathToMacrosFormat`/`resourcePath`, timezone/locale of `iCUE.*`,
+  focus/touch interception, the real meaning of `tick`.
+- Colour values (`color`) are a hypothesis (`#rrggbb`); keys without a default (e.g. `media-selector`) stay `undefined` (unverified).
+- No Chromium DevTools panel. (Hot reload, settings editor and device viewport have their own sections below.)
+- Mocks are **not equivalent** to the real plugins. A page that renders or a clean console does **not prove** the widget is correct.
+- `runJavaScript()` of PySide6 6.9.3 returns an empty string for arrays/objects: tests use `JSON.stringify`.
 ## Live reload v0.3
 - Full-page reload (not HMR) when any file under the open widget folder changes (HTML, CSS, JS, manifest, translations, assets). Ignored: .git, node_modules, editor swap/temp/backup files.
 - Polling every 100 ms (stdlib; measured <= 0.09 ms per scan on the 31 WidgetsXE widgets), reload after the folder stayed unchanged for 250 ms, so one Save gives one reload.
@@ -66,7 +79,7 @@ Co (dua tren `HtmlDataProvider.cpp` cua iCUE source v5.55, **chua doi chieu voi 
 - Tests: 130 pass (`tests/test_settings_panel.py`: 35). Real-widget tests do not ignore console errors: errors at load are the classified baseline (network vs runtime), any new error after the edits fails; structured textfields (URLs, fonts, paths) are not mutated by the generic test and are covered by a valid-URL fixture test. CORS is never disabled.
 
 ## Device profiles and viewport (D5 + D6)
-- Device profiles are generated from the real iCUE `.cuemsf` manifests into `widgetdevtool/profiles/device_profiles.json` (15 devices: XENEON EDGE, iCUE LINK GENERIC LCD, NAUTILUS II LCD, VANGUARD 96 keyboards, pump LCDs). Nothing is keyed by device name. Regenerate: `.venv\Scripts\python.exe -m widgetdevtool.device_profiles generate --icue D:\icue`. Devices without a size source in their manifest are skipped (listed in the file with the reason).
+- Device profiles are generated from the real iCUE `.cuemsf` manifests into `widgetdevtool/profiles/device_profiles.json` (15 devices: XENEON EDGE, iCUE LINK GENERIC LCD, NAUTILUS II LCD, VANGUARD 96 keyboards, pump LCDs). Nothing is keyed by device name. Regenerate: `.venv\Scripts\python.exe -m widgetdevtool.device_profiles generate` (iCUE source from `WIDGETDEVTOOL_ICUE_DIR`, or pass `--icue <dir>`). Devices without a size source in their manifest are skipped (listed in the file with the reason).
 - Top bar: Device, Size (only the sizes the device's manifest has), Orientation (dashboards), Mode, Preview scale. The page gets the nominal widget size iCUE computes (`widgetSizePx`: relative size x mimicScreenSize; keyboard/pump: fixed size) and measures it as `window.innerWidth/innerHeight`. Mode "Physical" (relative size x physicalScreenSize) is EXPERIMENTAL. Free size keeps the old behaviour.
 - (Since A2 the default is Native 1:1, see "Preview scaling (A2)".) A smaller preview uses the page zoom (EXPERIMENTAL); only zooms that keep the measurement exact are offered; `devicePixelRatio` is multiplied by the zoom. The label shows the measured page size and flags any mismatch.
 - Changing device/size/orientation does not reload the page and does not change instance settings; live reload and the settings editor keep working.
@@ -83,7 +96,7 @@ Co (dua tren `HtmlDataProvider.cpp` cua iCUE source v5.55, **chua doi chieu voi 
 ## Widget library and thumbnail inspector (D7a)
 - `Widget library` (top bar) opens a dock: choose any folder; every subfolder with `manifest.json` + `index.html` is a widget (nothing hardcoded). The tree shows the widgets grouped like iCUE groups them for the selected device (Device combo), plus a `Not listed` section with the reason (invalid widget, device type mismatch, `sensor-screen` without the device's touch setup). `Open selected widget` loads it in the renderer and settings editor; settings of every widget survive switching (re-opening a widget shows its instance again).
 - Image chain (iCUE v5.55 source): preview = `<meta name="x-icue-widget-preview">`, else the icon `<link rel="icon">`, else iCUE's default web-url.svg. `manifest.json` `preview_icon` is only validated (required string), it is NOT used for a thumbnail. No file existence check exists in iCUE: a missing file gives an empty image (the inspector marks it MISSING, no fallback). Group name = `x-icue-widget-group` (JS expression) else the widget name; a preview panel exists only for a group with more than one widget.
-- Two static drawings of the QML rules: WidgetPreviewPanel row (128x56, PreserveAspectCrop on `layer1` #000000) and WidgetTypesPanel tile (16x16, PreserveAspectFit, ColorOverlay `layer8`/`layer1`: only the alpha survives). Palette and default icon are read from the iCUE source (`python -m widgetdevtool.icue_theme generate --icue D:\icue`). Panel background, fonts and SVG rasterisation are not iCUE's; a static image is not a live HTML preview.
+- Two static drawings of the QML rules: WidgetPreviewPanel row (128x56, PreserveAspectCrop on `layer1` #000000) and WidgetTypesPanel tile (16x16, PreserveAspectFit, ColorOverlay `layer8`/`layer1`: only the alpha survives). Palette and default icon are read from the iCUE source (`python -m widgetdevtool.icue_theme generate`). Panel background, fonts and SVG rasterisation are not iCUE's; a static image is not a live HTML preview.
 - The Basketball Scores ticket is NOT reproduced or fixed by this: a black SVG would be invisible on the preview row, but Basketball Scores is alone in its group (no preview panel exists for it) and the type tile recolours the SVG. Which panel/condition shows the black thumbnails is still open.
 ## Multi-instance host (D7b)
 - Add / Clone / Close / Remove buttons and an instance list: several widget instances run at once, each with its own settings, WebEngine profile, localStorage and console. Only the selected one is shown and edited; the others keep running (hidden).

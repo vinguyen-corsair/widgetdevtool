@@ -29,11 +29,12 @@ from PySide6.QtWidgets import QApplication, QLineEdit  # noqa: E402
 from test_runtime_bridge import WIDGET_HTML, PageTestCase, write_widget  # noqa: E402
 from widgetdevtool.instance_store import WidgetInstance  # noqa: E402
 from widgetdevtool.main_window import MainWindow  # noqa: E402
+from widgetdevtool.paths import WIDGETS_DIR  # noqa: E402
 from widgetdevtool.properties import parse_settings  # noqa: E402
 from widgetdevtool.settings_editors import EDITABLE_TYPES  # noqa: E402
 from widgetdevtool.settings_panel import SettingsPanel  # noqa: E402
 
-WIDGETS = Path(r"D:\Widgets\WidgetsXE")
+WIDGETS = WIDGETS_DIR
 BASKETBALL = WIDGETS / "Basketball Scores" / "widget" / "basketballscores"
 SMOKECLOCK = WIDGETS / "SmokeClock" / "widget" / "smokeclock"
 RSS = WIDGETS / "RSS Feed Reader" / "widget" / "rssfeedreader"

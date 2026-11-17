@@ -9,7 +9,10 @@ import sys
 from datetime import date
 from pathlib import Path
 
-DEFAULT_SRC = Path(r"D:\icue\Application\src\qml\com\corsair\cue\htmlwidgets\src\HtmlDataProvider.cpp")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from widgetdevtool.paths import ICUE_DIR  # noqa: E402
+
+DEFAULT_SRC = ICUE_DIR / Path(r"Application\src\qml\com\corsair\cue\htmlwidgets\src\HtmlDataProvider.cpp")
 OUT = Path(__file__).resolve().parents[1] / "widgetdevtool" / "vendored"
 
 

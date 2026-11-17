@@ -1,6 +1,6 @@
 r"""Device profiles (D5) and device viewport (D6) tests.
 
-Pure tests read the real iCUE manifests (skipped when D:\icue is absent). Page tests measure the viewport through
+Pure tests read the real iCUE manifests (skipped when the iCUE source, widgetdevtool.paths.ICUE_DIR, is absent). Page tests measure the viewport through
 window.innerWidth / innerHeight in a real QtWebEngine page. Run: .venv\Scripts\python.exe -m unittest discover -s tests -v
 """
 from __future__ import annotations
@@ -27,8 +27,9 @@ from widgetdevtool.device_profiles import (  # noqa: E402
     KIND_DASHBOARD, KIND_KEYBOARD, KIND_PUMP, LANDSCAPE, PORTRAIT, PROFILES_FILE, DeviceProfile, generate_profiles,
     import_manifest, load_profiles)
 from widgetdevtool.viewport import FIT, MODE_NOMINAL, MODE_PHYSICAL, NATIVE, compute_viewport, exact_zooms, fit_scale  # noqa: E402
+from widgetdevtool.paths import ICUE_DIR  # noqa: E402
 
-ICUE = Path(r"D:\icue")
+ICUE = ICUE_DIR
 HAVE_ICUE = (ICUE / "Application" / "src" / "mod" / "devices" / "manifests").is_dir()
 PROFILES = load_profiles()
 BY_ID = {p.id: p for p in PROFILES}

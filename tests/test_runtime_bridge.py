@@ -21,6 +21,7 @@ from PySide6.QtWebEngineWidgets import QWebEngineView  # noqa: E402,F401  (befor
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
 from widgetdevtool.main_window import MainWindow, State  # noqa: E402
+from widgetdevtool.paths import WIDGETS_DIR  # noqa: E402
 from widgetdevtool.properties import compute_defaults, parse_properties  # noqa: E402
 from widgetdevtool.script_builder import build_data_script, parse_required_plugins, to_qml_string  # noqa: E402
 from widgetdevtool.translator import Translator  # noqa: E402
@@ -114,7 +115,7 @@ class PureTests(unittest.TestCase):
             self.assertEqual(fr.translate("Nope"), "Nope")
             self.assertIn("Nope", fr.missing_keys)
 
-RSS_FOLDER = Path(r"D:\Widgets\WidgetsXE\RSS Feed Reader\widget\rssfeedreader")
+RSS_FOLDER = WIDGETS_DIR / "RSS Feed Reader" / "widget" / "rssfeedreader"
 
 
 class PageTestCase(unittest.TestCase):

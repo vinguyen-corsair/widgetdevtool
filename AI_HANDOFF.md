@@ -1,13 +1,14 @@
-# AI_HANDOFF - iCUE Widget Dev Tool (D:\WidgetDevTool)
+# AI_HANDOFF - iCUE Widget Dev Tool (C:\Work\widgets\widgetdevtool)
 
 Last update: U2 (Validate & Package via the official icuewidget CLI) after E3 (per-instance size/orientation) after E2 (read-only iCUE instance importer) after P1 (performance diagnostics, measuring only) after A2 (Native 1:1 preview scaling) after A1 fix (reopening reuses instances, Reset Storage), after E1 (validation only, see VALIDATION_E1.md), D7b on top of D7a,  D4, C1, D5, D6, D1-D3. Read this first in the next review/session.
 
 ## Rules that apply to every session
-- Only edit `D:\WidgetDevTool`. Never touch iCUE 5 (`d:\icue`), Olympus (`D:\MyWorkspace\*`) or WidgetsXE (`D:\Widgets\WidgetsXE`).
+- Only edit `C:\Work\widgets\widgetdevtool`. Never touch iCUE 5 (`C:\Work\reference\icue`), Olympus (`C:\Work\reference\olympus`) or WidgetsXE (`C:\Work\widgets\WidgetsXE`).
+- Paths: the machine moved from `D:\` (`D:\WidgetDevTool`, `D:\icue`, `D:\Widgets\WidgetsXE`, `D:\MyWorkspace`) to `C:\Work` (`widgets\` = active work, `reference\` = read-only sources). Older sections below and `VALIDATION_E1.md` / `validation/` keep the old paths as a historical record.
+  The iCUE and WidgetsXE locations used by code and tests live in `widgetdevtool/paths.py` (env `WIDGETDEVTOOL_ICUE_DIR`, `WIDGETDEVTOOL_WIDGETS_DIR`); never hardcode them again.
 - iCUE source = branch `v5.55`; the target release (5.46.67 / 5.52.93) is NOT verified. Label everything Verified / Hypothesis / Unknown.
 - The Basketball Scores ticket is NOT reproduced or fixed (see D7a); D7b did not investigate it.
 - Environment: `.venv\Scripts\python.exe` (Python 3.13, PySide6 6.9.3). Tests: `.venv\Scripts\python.exe -m unittest discover -s tests`.
-  The tool that edits files cannot see `D:\`; edits were done with small Python patch scripts / PowerShell `WriteAllText`.
 - Do not run a test tail command that waits on the QtWebEngine process without a timeout (it hangs); use `Start-Process ... WaitForExit(ms)`.
 
 ## Status
@@ -121,9 +122,9 @@ values the page receives; they say NOTHING about how the widget looks in iCUE 5 
   Test: `test_app_status_is_metadata_only_no_key_no_runtime_value`.
 
 ## D5 - device profiles (`device_profiles.py`)
-- Source = the real `.cuemsf` files of `D:\icue` (`Application/src/mod/devices/**`, JSON `{"common": {...}}`). `generate` reads them and writes
+- Source = the real `.cuemsf` files of the iCUE source (`paths.ICUE_DIR`) (`Application/src/mod/devices/**`, JSON `{"common": {...}}`). `generate` reads them and writes
   `widgetdevtool/profiles/device_profiles.json` (15 profiles + 2 skipped; stores source path, sha256, iCUE branch). The tool loads that file at run time and needs no
-  iCUE checkout. Regenerate: `.venv\Scripts\python.exe -m widgetdevtool.device_profiles generate --icue D:\icue`. A test fails when the shipped file is stale.
+  iCUE checkout. Regenerate: `.venv\Scripts\python.exe -m widgetdevtool.device_profiles generate` (or `--icue <dir>`). A test fails when the shipped file is stale.
 - Nothing is keyed by device name: kind comes from the manifest structure, in the order of `WidgetSizeWatcherImpl::widgetSizePx()`: `WidgetScreenCapabilities` ->
   dashboard; else `ScreenModuleCapabilities.screenGeometry` -> keyboard; else `WidgetsRects.HardwareWidgetSetup` -> pump. A synthetic manifest test proves it.
 - Families with data: dashboard = XENEON EDGE (`dash_accessory_lcd`, S/M/L/XL, mimic 960x270, physical 2560x720, 6 slots), iCUE LINK GENERIC LCD (S/M/L, 480x270 /
