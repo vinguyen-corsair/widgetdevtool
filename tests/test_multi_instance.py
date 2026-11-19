@@ -338,7 +338,7 @@ class ReopenTests(MultiInstanceCase):
         first = self.open(root)
         self.window._on_setting_committed("label", "mine")
         before = self.counts()
-        for opener in (self.window.open_folder, self.window.open_library_widget, lambda f: self.window.open_folder(str(f) + os.sep)):
+        for opener in (self.window.open_folder, lambda f: self.window.open_folder(str(f) + os.sep)):
             self.assertTrue(opener(root))
             self.pump(0.2)
         self.assertIs(self.window.active, first)

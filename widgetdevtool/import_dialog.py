@@ -50,7 +50,7 @@ class ImportDialog(QDialog):
         layout.setContentsMargins(20, 18, 20, 16)
         layout.setSpacing(10)
         self.status.setProperty("role", "muted")
-        for widget in (self.file_button, self.status, self.listing, QLabel("Library widget (matched by typeId):"), self.match_combo, self.preview,
+        for widget in (self.file_button, self.status, self.listing, QLabel("Widget source in the widgets folder (matched by typeId):"), self.match_combo, self.preview,
                        self.apply_personalization):
             layout.addWidget(widget)
         layout.addLayout(buttons)
@@ -75,7 +75,7 @@ class ImportDialog(QDialog):
         for candidate in self.report.candidates:
             self.listing.addItem(candidate.label)
         skipped = f"; {len(self.report.skipped)} other attachment(s) skipped (not HTML widgets)" if self.report.skipped else ""
-        self.status.setText(f"{self.report.file_name}: {len(self.report.candidates)} HTML widget(s){skipped}. Library: {len(self.entries)} widgets.")
+        self.status.setText(f"{self.report.file_name}: {len(self.report.candidates)} HTML widget(s){skipped}. Widgets folder: {len(self.entries)} widgets.")
         if self.report.candidates:
             self.listing.setCurrentRow(0)
         return True

@@ -63,7 +63,7 @@ class MainWindowLayoutTests(PageTestCase):
 
     def test_main_actions_are_in_the_top_bar_with_icons_tooltips_and_one_primary(self) -> None:
         w = self.window
-        for widget in (w.open_button, w.library_button, w.import_icue_button, w.package_button):
+        for widget in (w.open_button, w.import_icue_button, w.package_button):
             self.assertIs(widget.parentWidget(), w.top_bar)
             self.assertFalse(widget.icon().isNull())
             self.assertTrue(widget.toolTip())
@@ -415,7 +415,6 @@ class CompactControlsAndTooltipsTests(PageTestCase):
         self.assertFalse(any(b.isEnabled() for b in (w.clone_button, w.reset_button, w.close_button, w.remove_button)))  # nothing to act on
         self.assertTrue(all(b.toolTip() for b in (w.clone_button, w.reset_button, w.close_button, w.remove_button)))
         self.load(write_widget(Path(self._tmp.name) / "w", html=ALL))
-        w.library_dock.setVisible(True)
         dialog = PackageDialog(make_compliant_widget(Path(self._tmp.name) / "p"), path_env=str(Path(self._tmp.name) / "none"),
                                settings=QSettings(str(Path(self._tmp.name) / "s.ini"), QSettings.Format.IniFormat), target=TARGET_ICUEAPPS)
         importer = ImportDialog([])

@@ -1,4 +1,4 @@
-# iCUE Widget Dev Tool (POC v0.7 - widget library)
+# iCUE Widget Dev Tool (POC v0.8 - iCUE tab, widgets folder, Open Package)
 
 Standalone previewer for iCUE HTML widgets. Python 3.13 + PySide6 6.9.3
 (QtWebEngine 6.9.3 / Chromium 130, the same engine family as iCUE 5.52).
@@ -11,7 +11,7 @@ Use the tool's own venv (no activation needed, the system Python is not used):
     .venv\Scripts\python.exe -m widgetdevtool
     .venv\Scripts\python.exe -m widgetdevtool "C:\Work\widgets\WidgetsXE\RSS Feed Reader\widget\rssfeedreader"
 
-Click **Open widget folder...** and choose a folder that contains `manifest.json` and `index.html`.
+Click **Open Widget** (Ctrl+O) and choose a folder that contains `manifest.json` and `index.html`.
 The widget is loaded directly from `file://` (no `.icuewidget` packaging, no import).
 The bottom panel is the JavaScript console: logs, uncaught errors and bridge notes (source `bridge`).
 
@@ -93,8 +93,9 @@ Based on `HtmlDataProvider.cpp` of the iCUE source v5.55 (**not yet compared wit
 - Switching Custom Style, editing personalization, or changing device updates the page through `onDataUpdated` without a reload; the instance is never rewritten (only the `widgetPersonalizationCustomStyleEnabled` switch and the `...Present` marker are stored in it).
 - Not simulated / Unknown: the personalization background image and backgroundMedia selection (editor unsupported), how a QColor reaches the widget (we send `#rrggbb`), the transparency control range, whether iCUE re-sends an unchanged map, several screens per device. A passing test proves the rule is applied, not that a widget looks like in iCUE 5.
 
-## Widget library and thumbnail inspector (D7a)
-- `Widget library` (top bar) opens a dock: choose any folder; every subfolder with `manifest.json` + `index.html` is a widget (nothing hardcoded). The tree shows the widgets grouped like iCUE groups them for the selected device (Device combo), plus a `Not listed` section with the reason (invalid widget, device type mismatch, `sensor-screen` without the device's touch setup). `Open selected widget` loads it in the renderer and settings editor; settings of every widget survive switching (re-opening a widget shows its instance again).
+## Widgets folder and iCUE tab (D7a, reworked)
+- **Widgets folder** (no button, no dock): the folder that holds your widget folders (e.g. `WidgetsXE`). The first widget you open sets it to its nearest parent folder (at most 3 levels up) that holds more than one widget; the home, temp and drive root folders are never scanned. It is saved in `workspace.json` and can be changed at the bottom of the iCUE tab. The iCUE tab counts groups among these widgets, and Import from iCUE finds a widget's source here by `typeId`.
+- **iCUE tab** (inspector): for the ACTIVE widget, however it was opened (Open Widget, Import, instance list): typeId, a checks list (missing/undecodable preview or icon, dark images, device listing, notes), group (name, declared/implicit, number of widgets, preview panel yes/no, members), the redrawn preview row and type tiles, and the full text report (collapsed, Copy). The group is counted among the widgets of the widgets folder; without a widgets folder containing the widget only the widget itself is known and the tab says so. It refreshes on live reload and device change.
 - Image chain (iCUE v5.55 source): preview = `<meta name="x-icue-widget-preview">`, else the icon `<link rel="icon">`, else iCUE's default web-url.svg. `manifest.json` `preview_icon` is only validated (required string), it is NOT used for a thumbnail. No file existence check exists in iCUE: a missing file gives an empty image (the inspector marks it MISSING, no fallback). Group name = `x-icue-widget-group` (JS expression) else the widget name; a preview panel exists only for a group with more than one widget.
 - Two static drawings of the QML rules: WidgetPreviewPanel row (128x56, PreserveAspectCrop on `layer1` #000000) and WidgetTypesPanel tile (16x16, PreserveAspectFit, ColorOverlay `layer8`/`layer1`: only the alpha survives). Palette and default icon are read from the iCUE source (`python -m widgetdevtool.icue_theme generate`). Panel background, fonts and SVG rasterisation are not iCUE's; a static image is not a live HTML preview.
 - The Basketball Scores ticket is NOT reproduced or fixed by this: a black SVG would be invisible on the preview row, but Basketball Scores is alone in its group (no preview panel exists for it) and the type tile recolours the SVG. Which panel/condition shows the black thumbnails is still open.
@@ -104,8 +105,13 @@ Based on `HtmlDataProvider.cpp` of the iCUE source v5.55 (**not yet compared wit
 - `workspace.json` in the data dir restores the instances (same ids, settings, sources), the active one and the device/size when the tool restarts.
 - A source edit reloads every instance of that widget once (one watcher per folder). Device, size and personalization are shared by all instances.
 - Measured: two instances do not share localStorage; 250 tests pass. Not claimed: equivalence with iCUE 5 (see AI_HANDOFF.md, "D7b").
+## Open Package (a downloaded .icuewidget)
+- **Open Package** (top bar, Ctrl+Shift+O) or `wdt <file>.icuewidget`: choose a package (e.g. downloaded from the Elgato marketplace). A `.icuewidget` is a ZIP with the widget files at its root (one wrapping folder is stripped).
+- Its typeId already in the widgets folder: that source is opened, the package is NOT extracted (the message shows both versions).
+- Otherwise, after a confirmation: extracted to `<widgets folder>\<widget name>\widget\<package name without -version>\`, the package itself copied to `<widgets folder>\<widget name>\`, then opened with the iCUE tab shown.
+- Nothing is ever overwritten; archive paths are checked first (no `..`, absolute path or link; file-count and size limits); extraction goes through a staging folder, so a failure leaves nothing behind.
 ## Opening widgets and Reset Storage (A1)
-- Open Folder, the Widget Library and `python -m widgetdevtool <folder>` reuse the instance of that folder (same id, settings and localStorage; a closed one is reopened). Only **Add** and **Clone** create new instances. With several instances of one folder, the most recently shown one opens; the list selects another. Older duplicates are kept.
+- Open Widget and `python -m widgetdevtool <folder>` reuse the instance of that folder (same id, settings and localStorage; a closed one is reopened). Only **Add** and **Clone** create new instances. With several instances of one folder, the most recently shown one opens; the list selects another. Older duplicates are kept.
 - **Reset Storage** (asks first) deletes the localStorage/cache of the selected instance only and restarts it with the same id and settings. Tool storage only, never iCUE's.
 
 ## Preview scaling (A2)
@@ -113,12 +119,12 @@ Based on `HtmlDataProvider.cpp` of the iCUE source v5.55 (**not yet compared wit
 - At fractional Windows scaling (125/150 %) Qt rounding can add 1 px to the measured page; this was only simulated here (this PC is 100 %). No claim of pixel equivalence with iCUE 5.
 - 323 tests pass (also on the real `windows` Qt platform).
 ## Window size (layout fix)
-- The main window keeps its size when you change Device / Size / Orientation / preview scale: only the viewport inside the preview frame changes (a larger viewport scrolls). Long texts are clipped (tooltip = full text), the side column scrolls, the Widget Library makes room once when opened. Closing the tool hides the window.
+- The main window keeps its size when you change Device / Size / Orientation / preview scale: only the viewport inside the preview frame changes (a larger viewport scrolls). Long texts are clipped (tooltip = full text), the side column scrolls, Closing the tool hides the window.
 - Cause of the earlier growth: labels/combos set the window's minimum width through the layout (see AI_HANDOFF.md, "Window growth bug").
 ## Performance diagnostics (P1)
 - `PERFORMANCE_DIAGNOSTICS.md` + `tools/perf_probe.py` (Windows; watchdog, memory guard, timeouts): CPU/RAM of python and the QtWebEngine children for 1/3/10 instances, idle reload/event counts and Add/Close/Remove trends. Result: no loop, duplicate watcher or orphan process found; one renderer (~65-90 MB) per instance, all released after Remove; tiny unexplained growth (+0.33 MB private per Add/Remove cycle) is not concluded as a leak.
 ## Import from iCUE (E2, read-only)
-- **Import from iCUE...** reads an iCUE `dashlcd\storage` file (choose it yourself; it is only read, never written or locked), lists its HTML widgets, shows a masked preview (URLs, paths and token-like text appear only as lengths) and creates a NEW instance (own id and storage) with the stored settings after you confirm. The widget source is found in the Widget Library by `typeId`; no match is reported, never guessed. Existing instances are never overwritten.
+- **Import from iCUE...** reads an iCUE `dashlcd\storage` file (choose it yourself; it is only read, never written or locked), lists its HTML widgets, shows a masked preview (URLs, paths and token-like text appear only as lengths) and creates a NEW instance (own id and storage) with the stored settings after you confirm. The widget source is found in the widgets folder by `typeId`; no match is reported, never guessed. Existing instances are never overwritten.
 - Values are kept as stored (a null stays null, an undecodable value is left out and listed, missing properties get no default). iCUE's browser storage, cookies and account data are not read. The stored size becomes the instance's own size. Optional, off by default: copy the stored device/screen personalization.
 - The importer reports differences (library vs iCUE widget version, older/newer storage format, missing/undeclared properties); it does not apply iCUE's migrations. Details and limits: AI_HANDOFF.md, "E2".
 ## Per-instance size (E3)
@@ -138,7 +144,7 @@ Based on `HtmlDataProvider.cpp` of the iCUE source v5.55 (**not yet compared wit
 - Under **Advanced options**, **OFF by default**. When ON, the void elements in `<head>` of the temporary copy are also self-closed (`<link ...>` -> `<link ... />`). "Preview Changes (Diff)" shows the analysis and the diff without building. Anything else the CLI rejects is reported as NOT FIXED (e.g. a `<header>` element in the body).
 ## UI/UX (U1)
 - Dark theme (`theme.py`, Fusion + one style sheet, semantic properties `variant` / `role` / `tone`), line icons (`icons.py`, inline SVG), small widgets (`ui_kit.py`: SegmentedControl, FlowLayout, ClippedLabel).
-- Layout: top bar (Open Widget Ctrl+O, Widget Library Ctrl+L, Import from iCUE Ctrl+I, panel toggles, primary **Build Package** menu Ctrl+Shift+B) | Instances panel | Preview (title, Auto Reload toggle, Reload F5, Device / Orientation / Widget size / Preview scale, page size + Pixels mode) over a collapsible Console | Inspector tabs (Settings, Personalization) | status bar (state, watcher, "Simulated runtime" notes).
+- Layout: top bar (Open Widget Ctrl+O, Open Package Ctrl+Shift+O, Import from iCUE Ctrl+I, panel toggles, primary **Build Package** menu Ctrl+Shift+B) | Instances panel | Preview (title, Auto Reload toggle, Reload F5, Device / Orientation / Widget size / Preview scale, page size + Pixels mode) over a collapsible Console | Inspector tabs (Settings, Personalization, Sensors, iCUE) | status bar (state, watcher, "Simulated runtime" notes).
 - **Widget size** (S/M/L/XL, stored per instance) and **Preview scale** (how the viewport is drawn; never changes the page) are separate controls; sizes a device does not offer are shown disabled with the reason.
 - Package dialog: target selector; for iCUE Apps the min_app_version card and Legacy Compatibility under **Advanced options** (OFF by default); status shown as a coloured banner, log below.
 - Window growth rule: changing Device / Size / Orientation / Mode / Preview scale or switching instances never changes the window (size, position), the sidebars, top bar, console or preview container; only the HTML view inside the preview changes (scroll in Native, shrink in Visual Fit). Nothing is locked: resize the window, drag the splitters, toggle panels. A narrow window shows the secondary top-bar actions as icons.

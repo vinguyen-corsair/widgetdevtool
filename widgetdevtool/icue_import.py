@@ -408,8 +408,8 @@ def preview_text(report: StorageReport, candidate: Candidate, matches: list, ins
         lines.append(f"BLOCKED: {candidate.blocked}")
     lines += [f"WARNING: {w}" for w in candidate.warnings]
     if not matches:
-        lines.append(f"NO MATCH: no widget with typeId {candidate.type_id} among the {library_size} widgets of the Widget Library. Nothing is guessed: "
-                     "load the folder that contains it with 'Widget library', then try again.")
+        lines.append(f"NO MATCH: no widget with typeId {candidate.type_id} among the {library_size} widgets of the widgets folder. Nothing is guessed: "
+                     "open the widget once with Open Widget (or change the widgets folder in the iCUE tab), then try again.")
     else:
         lines.append(f"Library matches: {len(matches)} ({'choose one' if len(matches) > 1 else 'one'})")
         for entry in matches:
