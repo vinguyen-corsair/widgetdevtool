@@ -677,21 +677,6 @@ class WindowSizeStabilityTests(PageTestCase):
             self.pump(0.2)
         self.assertEqual({n: getattr(w, n).geometry() for n in names}, where)  # only the viewport inside the frame changed
 
-    def test_opening_the_widget_library_makes_room_once_and_keeps_the_dock_inside_the_window(self) -> None:
-        w = self.window
-        w.library_dock.setVisible(True)
-        self.pump(0.4)
-        dock = w.library_dock.geometry()
-        self.assertTrue(w.rect().contains(dock), f"{dock} outside {w.rect()}")
-        opened = self.snapshot()["window"]
-        for size, orientation in (("SizeS", LANDSCAPE), ("SizeXL", PORTRAIT), ("SizeS", LANDSCAPE)):
-            w.select_device("dash_accessory_lcd", size, orientation)
-            self.pump(0.2)
-        self.assertEqual(self.snapshot()["window"], opened)
-        w.library_dock.setVisible(False)
-        w.library_dock.setVisible(True)  # toggling never grows the window again
-        self.pump(0.3)
-        self.assertEqual(self.snapshot()["window"], opened)
     def test_shutdown_hides_the_window_so_finished_test_windows_do_not_pile_up(self) -> None:
         self.assertTrue(self.window.isVisible())
         self.window.shutdown()

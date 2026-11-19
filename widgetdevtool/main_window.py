@@ -13,7 +13,6 @@ from PySide6.QtCore import QCoreApplication, QEvent, QSize, QTimer, Qt, QUrl, Si
 from PySide6.QtWebEngineCore import QWebEnginePage
 from PySide6.QtWidgets import (
     QAbstractButton,
-    QDockWidget,
     QFrame,
     QScrollArea,
     QComboBox,
@@ -52,7 +51,9 @@ from .qrc_fonts import register_fonts
 from .console_log import ConsoleEntry, ConsoleLog
 from .device_profiles import LANDSCAPE, PORTRAIT, SIZE_LABEL, DeviceProfile, load_profiles
 from .runtime_bridge import RuntimeBridge, parse_widget_settings
-from .library_panel import LibraryPanel
+from .icue_info_panel import IcueInfoPanel, inspect
+from .widgets_folder import WidgetsFolder
+from .package_import import PackageError, destination, extract, find_existing, read_package
 from .personalization import has_personalization
 from .personalization_panel import PersonalizationPanel
 from .sensors_panel import SensorsPanel
@@ -163,7 +164,7 @@ class MainWindow(QMainWindow):
         self._build_ui()
         self._refresh_instance_list()  # instance actions start disabled: nothing to act on yet
         self._set_watch("Not watching (no widget open)", "neutral")
-        self._set_state(State.IDLE, "Open a widget folder to start (Open Widget, Widget Library or Import from iCUE).")
+        self._set_state(State.IDLE, "Open a widget folder to start (Open Widget or Import from iCUE).")
 
     # ---- UI ---------------------------------------------------------------
     # Layout (U1): top bar | [Instances | Preview (header + viewport) / Console | Inspector (Settings, Personalization)] | status bar.
@@ -219,8 +220,10 @@ class MainWindow(QMainWindow):
                                   tooltip="Open a widget folder (must contain manifest.json and index.html).\n"
                                           "A folder that already has an instance shows that instance again.")
         self.open_button.clicked.connect(self.choose_folder)
-        self.library_button = button("Widget Library", "library", checkable=True, shortcut="Ctrl+L",
-                                     tooltip="Show or hide the Widget Library: browse a folder of widgets and open one.")
+        self.open_package_button = button("Open Package", "archive", shortcut="Ctrl+Shift+O",
+                                          tooltip="Add a downloaded .icuewidget to the widgets folder as source, then open it.\n"
+                                                  "A widget whose typeId is already there is opened, not extracted. Nothing is overwritten.")
+        self.open_package_button.clicked.connect(self.choose_package)
         self.import_icue_button = button("Import from iCUE", "import", shortcut="Ctrl+I",
                                          tooltip="Read-only: read an iCUE dashlcd storage file and create a NEW instance with the stored settings.")
         self.import_icue_button.clicked.connect(self.open_import_dialog)
@@ -239,31 +242,20 @@ class MainWindow(QMainWindow):
                                        tooltip="Show or hide the Instances panel", shortcut="Ctrl+Shift+E")
         self.inspector_toggle = button(icon="panel-right", variant="ghost", icon_only=True, checkable=True,
                                        tooltip="Show or hide the inspector (Settings, Personalization, Sensors)", shortcut="Ctrl+Shift+S")
-        self.library_panel = LibraryPanel()
-        self.library_panel.openRequested.connect(self.open_library_widget)
-        self.library_dock = QDockWidget("Widget Library", self)
-        self.library_dock.setWidget(self.library_panel)
-        self.library_dock.setVisible(False)
-        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.library_dock)
-        for name, tip in (("qt_dockwidget_floatbutton", "Detach the Widget Library into its own window (double-click its title to dock it again)"),
-                          ("qt_dockwidget_closebutton", "Close the Widget Library (reopen it with Widget Library, Ctrl+L)")):
-            title_button = self.library_dock.findChild(QAbstractButton, name)
-            if title_button is not None:
-                title_button.setToolTip(tip)
-        self.library_button.clicked.connect(lambda: self.library_dock.setVisible(self.library_dock.isHidden()))
-        self.library_dock.visibilityChanged.connect(self._on_library_visibility)
+        self.widgets_folder = WidgetsFolder()  # no UI: detected from the first opened widget, remembered, changed in the iCUE tab
+        self.widgets_folder.changed.connect(self._on_widgets_folder_changed)
         bar = QHBoxLayout(self.top_bar)
         bar.setContentsMargins(10, 6, 10, 6)
         bar.setSpacing(theme.SPACING)
         bar.addWidget(self.brand_label, 1)
-        for widget in (self.open_button, self.library_button, self.import_icue_button):
+        for widget in (self.open_button, self.open_package_button, self.import_icue_button):
             bar.addWidget(widget)
         bar.addSpacing(12)
         bar.addWidget(self.instances_toggle)
         bar.addWidget(self.inspector_toggle)
         bar.addSpacing(8)
         bar.addWidget(self.package_button)
-        self._top_texts = {b: b.text() for b in (self.open_button, self.library_button, self.import_icue_button)}
+        self._top_texts = {b: b.text() for b in (self.open_button, self.open_package_button, self.import_icue_button)}
         self._top_compact = False
         self.top_bar.installEventFilter(self)
 
@@ -277,7 +269,7 @@ class MainWindow(QMainWindow):
         bar = self.top_bar.layout()
         margins = bar.contentsMargins()
         need = margins.left() + margins.right() + 12 + 8 + bar.spacing() * (bar.count() - 1) + self.brand_label.fontMetrics().horizontalAdvance("iCUE")
-        need += sum(w.sizeHint().width() for w in (self.open_button, self.library_button, self.import_icue_button, self.instances_toggle,
+        need += sum(w.sizeHint().width() for w in (self.open_button, self.open_package_button, self.import_icue_button, self.instances_toggle,
                                                    self.inspector_toggle, self.package_button))
         compact = self.top_bar.width() < need
         if compact:
@@ -510,6 +502,10 @@ class MainWindow(QMainWindow):
         self.inspector.addTab(self.sensors_scroll, "Sensors")
         self.inspector.setTabToolTip(2, "Sensors: the data source of the Sensorsdataprovider for every instance - MOCK catalog (invented, "
                                         "editable) or LIVE sensors of this PC from the Olympus Hub.")
+        self.icue_info_panel = IcueInfoPanel()
+        self.icue_info_panel.changeFolderRequested.connect(self.choose_widgets_folder)
+        self.inspector.addTab(self.icue_info_panel, "iCUE")
+        self.inspector.setTabToolTip(3, "How iCUE identifies the active widget: typeId, group, preview panel, thumbnails and their checks.")
         bar = self.inspector.tabBar()
         bar.setUsesScrollButtons(False)  # never hidden tabs behind arrows: a too narrow panel elides the tab texts instead
         bar.setElideMode(Qt.TextElideMode.ElideRight)
@@ -618,17 +614,6 @@ class MainWindow(QMainWindow):
             self.splitter.setSizes([widths[0], max(1, total - sum(widths)), widths[1]])
         finally:
             self._fitting = False
-
-    def _on_library_visibility(self, visible: bool) -> None:
-        """Opening the Widget Library takes width from the central area: make room once, never shrink, never beyond the screen."""
-        self.library_button.setChecked(visible)
-        if not (visible and self._minimum_fixed):
-            return
-        self.resizeDocks([self.library_dock], [360], Qt.Orientation.Horizontal)  # not the panel's (huge) size hint
-        need = self.centralWidget().minimumSizeHint().width() + 360 + 16
-        target = min(max(self.width(), need), self.screen().availableGeometry().width())
-        if target > self.width():
-            self.resize(target, self.height())
 
     # ---- device viewport (D6) ---------------------------------------------------------------------------
     def _build_device_bar(self) -> None:
@@ -808,7 +793,7 @@ class MainWindow(QMainWindow):
             self.viewport_frame.set_free()
             self._refresh_device_controls()
             self._apply_personalization()
-            self.library_panel.set_device(None)
+            self.widgets_folder.set_device(None)
             self._changed()
             return None
         profile = next((p for p in self.profiles if p.id == device_id), None)
@@ -831,7 +816,7 @@ class MainWindow(QMainWindow):
         self._apply_viewports()
         self._refresh_device_controls()
         self._apply_personalization()  # the active personalization is per device
-        self.library_panel.set_device(self.device)
+        self.widgets_folder.set_device(self.device)
         self._changed()
         return self.viewport
 
@@ -979,6 +964,7 @@ class MainWindow(QMainWindow):
         self.viewport_frame.show_view(None)
         self._idle_current = check
         self.settings_panel.clear("Invalid widget: no settings.")
+        self._refresh_icue_info()
         self._stop_invalid_watch()
         self._invalid = (check.folder, instance, follow_source)
         self._invalid_watcher = FolderWatcher(self)
@@ -1036,6 +1022,7 @@ class MainWindow(QMainWindow):
             self.settings_panel.set_settings(runtime.bridge.settings_spec, runtime.instance)
         self._refresh_instance_list()
         self._show_personalization()
+        self._refresh_icue_info()
         self._set_watch(self._watching_text(), "neutral")
         if runtime.state is not None:
             self._set_state(runtime.state, runtime.status_text, runtime)
@@ -1151,6 +1138,7 @@ class MainWindow(QMainWindow):
         if runtime is self.active:
             self.settings_panel.set_settings(runtime.bridge.settings_spec, runtime.instance)
             self._show_personalization()
+            self._refresh_icue_info()  # a live reload: the metadata or the images may have changed
         self._refresh_instance_list()
 
     def _report_refresh(self, runtime: InstanceRuntime, report: dict | None) -> None:
@@ -1244,9 +1232,93 @@ class MainWindow(QMainWindow):
         self.personalization.set_theme_by_screen(self._personalization_key(), enabled)
         return self._apply_personalization()
 
-    def open_library_widget(self, folder: str | Path) -> bool:
-        """Open a widget chosen in the library (same rules as Open Folder / the command line: see open_folder)."""
-        return self.open_folder(folder)
+    def _refresh_icue_info(self) -> None:
+        """The iCUE tab follows the active widget (or the rejected folder), its group counted among the Widget Library widgets."""
+        check = self.current
+        if check is None:
+            self.icue_info_panel.clear()
+            return
+        if self.widgets_folder.adopt(check.folder):  # emits changed -> this method again, with the folder known
+            return
+        self.icue_info_panel.show_inspection(inspect(check.folder, self.widgets_folder.entries, self.device))
+
+    def _on_widgets_folder_changed(self) -> None:
+        folder = self.widgets_folder
+        self.icue_info_panel.set_widgets_folder(folder.root, len(folder.entries))
+        self._refresh_icue_info()
+        if not self._restoring:
+            self._changed()
+
+    def set_widgets_folder(self, root: str | Path | None) -> int:
+        """Use `root` as the widgets folder (None: forget it; the next opened widget chooses one again). Returns the widgets found."""
+        return self.widgets_folder.set_root(root)
+
+    # ---- Open Package: a downloaded .icuewidget becomes source in the widgets folder -----------------------------------------
+    def choose_package(self) -> None:
+        start = Path.home() / "Downloads"
+        path, _ = QFileDialog.getOpenFileName(self, "Open widget package", str(start if start.is_dir() else Path.home()),
+                                              "iCUE widget package (*.icuewidget);;ZIP archive (*.zip);;All files (*)")
+        if path:
+            self.open_package(path)
+
+    def _package_message(self, ask: bool, title: str, text: str, warning: bool = False) -> None:
+        self.status.setText(text.split("\n")[0])
+        if ask:
+            (QMessageBox.warning if warning else QMessageBox.information)(self, title, text)
+
+    def open_package(self, path: str | Path, *, ask: bool = True) -> Path | None:
+        """Add the package to the widgets folder (unless its typeId is already there) and open it with the iCUE tab shown.
+        Returns the widget folder that was opened, or None. `ask=False` (tests, scripts): no dialogs, no confirmation."""
+        try:
+            info = read_package(path)
+        except PackageError as exc:
+            self._package_message(ask, "Open Package", f"Cannot open {Path(path).name}: {exc}", warning=True)
+            return None
+        folder = self.widgets_folder
+        if folder.root is None and ask:
+            QMessageBox.information(self, "Open Package", "Choose the folder that holds your widget sources (e.g. WidgetsXE) first. "
+                                                          "The package is extracted there.")
+            self.choose_widgets_folder()
+        if folder.root is None:
+            self._package_message(ask, "Open Package", "No widgets folder: the package was not extracted.", warning=True)
+            return None
+        folder.rescan()
+        existing = find_existing(info, folder.entries)
+        if existing:
+            entry = existing[0]
+            source_version = str((entry.check.manifest or {}).get("version", "?"))
+            self.open_folder(entry.folder)
+            self.inspector.setCurrentWidget(self.icue_info_panel)
+            self._package_message(ask, "Open Package",
+                                  f"{info.name or info.type_id} is already in the widgets folder: opened it, the package was NOT extracted.\n\n"
+                                  f"typeId: {info.type_id}\nSource: {entry.folder} (version {source_version})\n"
+                                  f"Package: {info.path.name} (version {info.version or '?'})")
+            return entry.folder
+        project, target = destination(info, folder.root)
+        if ask:
+            answer = QMessageBox.question(
+                self, "Open Package",
+                f"Add {info.name or info.type_id} {info.version} to your widgets folder?\n\ntypeId: {info.type_id}\n"
+                f"Widget source: {target}\nPackage copy: {project / info.path.name}\n\nNothing existing is overwritten.",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, QMessageBox.StandardButton.Yes)
+            if answer != QMessageBox.StandardButton.Yes:
+                return None
+        try:
+            target = extract(info, folder.root)
+        except (PackageError, OSError) as exc:
+            self._package_message(ask, "Open Package", f"Not extracted: {exc}", warning=True)
+            return None
+        folder.rescan()
+        self.open_folder(target)
+        self.inspector.setCurrentWidget(self.icue_info_panel)
+        self.status.setText(f"Added {info.name or info.type_id} {info.version} to {target}")
+        return target
+
+    def choose_widgets_folder(self) -> None:
+        folder = QFileDialog.getExistingDirectory(self, "Select the folder that holds your widgets",
+                                                  str(self.widgets_folder.root or (self.current.folder if self.current else "")))
+        if folder:
+            self.set_widgets_folder(folder)
 
     # ---- opening a folder never duplicates an instance (A1) ---------------------------------------------
     @staticmethod
@@ -1273,7 +1345,7 @@ class MainWindow(QMainWindow):
         return found[-1] if found else None
 
     def open_folder(self, folder: str | Path) -> bool:
-        """Open a widget folder from the UI, the library or the command line WITHOUT creating a duplicate.
+        """Open a widget folder from the UI or the command line WITHOUT creating a duplicate.
 
         A folder that already has instance(s) shows one of them: a running instance is just selected (no reload); a closed one
         is opened again with the same id (so the same storage), settings and device state (it then follows its source like a live
@@ -1398,6 +1470,7 @@ class MainWindow(QMainWindow):
         elif self._active_id is None:
             self.viewport_frame.show_view(None)
             self.settings_panel.clear("No instance open.")
+            self.icue_info_panel.clear()
             self.console_view.clear()
             self._idle_current = None
             self.widget_title.setText("No widget open")
@@ -1453,13 +1526,15 @@ class MainWindow(QMainWindow):
 
     # ---- import from iCUE (E2, read-only) -----------------------------------------------------------------
     def open_import_dialog(self) -> ImportDialog:
-        dialog = ImportDialog(self.library_panel.entries, self)
+        if self.widgets_folder.root is not None:
+            self.widgets_folder.rescan()  # widgets added since the last scan are found too
+        dialog = ImportDialog(self.widgets_folder.entries, self)
         dialog.device = self.device
 
         def run(candidate, entry, report, personalization) -> None:
             instance = self.import_icue_instance(candidate, entry, report=report, apply_personalization=personalization)
             dialog.status.setText("Imported as a new instance, size " + (instance.size or "n/a") + (f". NOTE: {self.import_notice}" if self.import_notice else "")
-                                  if instance is not None else "Import failed: the library widget is invalid.")
+                                  if instance is not None else "Import failed: the widget folder is invalid.")
         dialog.importRequested.connect(run)
         dialog.show()
         self._import_dialog = dialog
@@ -1522,7 +1597,8 @@ class MainWindow(QMainWindow):
                "active": self._active_id, "recent": [i for i in self._recent if i in self.store],
                "device": {"id": self.device.id if self.device else None, "size": self._default_size,
                           "orientation": self._default_orientation, "mode": self.device_mode},
-               "pendingStorageDeletes": [list(k) for k in self.pending_storage_deletes]}
+               "pendingStorageDeletes": [list(k) for k in self.pending_storage_deletes],
+               "widgetsFolder": str(self.widgets_folder.root) if self.widgets_folder.root else None}
         tmp = target.with_name(target.name + ".tmp")
         tmp.write_text(json.dumps(doc, indent=2, ensure_ascii=False), encoding="utf-8")
         tmp.replace(target)
@@ -1543,6 +1619,8 @@ class MainWindow(QMainWindow):
             self.pending_storage_deletes = [tuple(k) for k in doc.get("pendingStorageDeletes", [])]
             for unique_id, type_id in list(self.pending_storage_deletes):
                 self._delete_storage(unique_id, type_id)
+            root = doc.get("widgetsFolder")
+            self.widgets_folder.set_root(root if root and Path(root).is_dir() else None)
             device = doc.get("device") or {}
             try:
                 self.select_device(device.get("id"), device.get("size"), device.get("orientation"), device.get("mode") or MODE_NOMINAL)

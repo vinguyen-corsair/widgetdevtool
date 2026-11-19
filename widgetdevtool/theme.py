@@ -147,7 +147,7 @@ QPlainTextEdit[role="log"] {{ font-family: "{MONO_FAMILIES[0]}", "{MONO_FAMILIES
 QTabWidget::pane {{ border: none; border-top: 1px solid {BORDER}; background: {SURFACE}; }}
 QTabBar::tab {{ background: transparent; color: {MUTED}; padding: 7px 10px; border: none; border-bottom: 2px solid transparent; }}
 QTabWidget#inspector::tab-bar {{ left: {PANEL_MARGIN - 8}px; }}
-QTabWidget#inspector QTabBar::tab {{ margin-top: {SECTION_GAP}px; margin-right: 4px; padding: 6px 8px; }}
+QTabWidget#inspector QTabBar::tab {{ margin-top: {SECTION_GAP}px; margin-right: 2px; padding: 6px 6px; }}
 QTabBar::tab:hover {{ color: {TEXT}; }}
 QTabBar::tab:selected {{ color: {TEXT}; border-bottom: 2px solid {ACCENT}; font-weight: 600; }}
 QTabBar::tab:focus {{ color: #ffffff; }}

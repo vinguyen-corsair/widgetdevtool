@@ -1,6 +1,6 @@
 # AI_HANDOFF - iCUE Widget Dev Tool (C:\Work\widgets\widgetdevtool)
 
-Last update: U2 (Validate & Package via the official icuewidget CLI) after E3 (per-instance size/orientation) after E2 (read-only iCUE instance importer) after P1 (performance diagnostics, measuring only) after A2 (Native 1:1 preview scaling) after A1 fix (reopening reuses instances, Reset Storage), after E1 (validation only, see VALIDATION_E1.md), D7b on top of D7a,  D4, C1, D5, D6, D1-D3. Read this first in the next review/session.
+Last update: U3 (iCUE tab, widgets folder replaces the Widget Library dock, Open Package) after U2 (Validate & Package via the official icuewidget CLI) after E3 (per-instance size/orientation) after E2 (read-only iCUE instance importer) after P1 (performance diagnostics, measuring only) after A2 (Native 1:1 preview scaling) after A1 fix (reopening reuses instances, Reset Storage), after E1 (validation only, see VALIDATION_E1.md), D7b on top of D7a,  D4, C1, D5, D6, D1-D3. Read this first in the next review/session.
 
 ## Rules that apply to every session
 - Only edit `C:\Work\widgets\widgetdevtool`. Never touch iCUE 5 (`C:\Work\reference\icue`), Olympus (`C:\Work\reference\olympus`) or WidgetsXE (`C:\Work\widgets\WidgetsXE`).
@@ -22,7 +22,8 @@ Last update: U2 (Validate & Package via the official icuewidget CLI) after E3 (p
 | D5 device profiles (`device_profiles.py`, generated `profiles/device_profiles.json`) | done, awaiting review |
 | D6 device viewport (`viewport.py`, device bar in `main_window.py`) | done, awaiting review |
 | D4 widget personalization (`personalization.py`, `personalization_panel.py`, Custom Style in `settings_panel.py`) | done, awaiting review |
-| D7a widget library + thumbnail inspector (`widget_library.py`, `thumbnails.py`, `icue_theme.py`, `library_panel.py`) | done, awaiting review |
+| D7a widget library + thumbnail inspector (`widget_library.py`, `thumbnails.py`, `icue_theme.py`; the `library_panel.py` dock was removed in U3) | done, awaiting review |
+| U3 iCUE tab + widgets folder + Open Package (`icue_info_panel.py`, `widgets_folder.py`, `package_import.py`) | done, awaiting review |
 | D7b multi-instance host (`instance_runtime.py`, `instance_storage.py`, `viewport.py`, `main_window.py`) | done, awaiting review |
 | E1 end-to-end validation + gap analysis (`VALIDATION_E1.md`, `validation/e1/`) | done, no code changed, awaiting review |
 
@@ -30,7 +31,18 @@ Regression: 323 tests OK (U2: +21 in `test_packager.py`, 3 of them run the REAL 
 Two older tests were adapted for D4 (see "D4 changes to older tests").
 Real widgets were also driven in a VISIBLE window (platform `windows`, not offscreen): D3 and D6 tables below.
 
+## U3 - iCUE tab, widgets folder, Open Package (`icue_info_panel.py`, `widgets_folder.py`, `package_import.py`, `main_window.py`, `__main__.py`; tests `tests/test_widget_library.py`, `tests/test_package_import.py`)
+Why: "Open Widget" and "Widget Library" both ended in `open_folder()`; the identification details (typeId, group, preview panel, thumbnails) were only in the library dock, so a widget had to be chosen twice. User decision: one place for the details, no library button.
+- **iCUE tab** (4th inspector tab, `IcueInfoPanel`): always the ACTIVE widget (or the rejected folder), however it was opened. Header (name, typeId, summary), Checks (error/warning/info list from `findings()`), Group (name declared/implicit, widget count, preview panel yes/no, members, preview/icon source, `preview_icon` = manifest only), Thumbnails (the D7a redraws, shrunk to the panel width), Full report (the old D7a text, collapsed, Copy), Widgets folder (path, count, Change...). `inspect()` is pure (no window). Refreshed in `_activate`, on a live reload of the active instance (`_register_instance`), on invalid folders, and when the widgets folder or the device changes.
+- **Widgets folder** (`WidgetsFolder`, no UI): replaces the Widget Library dock and `library_panel.py` (deleted). Chosen automatically from the first opened widget: the nearest parent (at most 3 levels up) whose `scan_library` finds more than one widget; home, temp and drive root are never scanned. Saved as `widgetsFolder` in workspace.json, changed with "Change..." in the iCUE tab. Used for the group count in the iCUE tab and by Import from iCUE (typeId match; rescanned when the dialog opens). Top bar: Open Widget, Open Package, Import from iCUE (Ctrl+L removed).
+- **Open Package** (Ctrl+Shift+O, also `wdt <file>.icuewidget`): `.icuewidget` = ZIP with the files at the root (one wrapping folder stripped). Same typeId already in the widgets folder -> that source is opened, nothing extracted. Otherwise, after a confirmation: `<root>\<widget name>\widget\<base name>\` + the package copied to `<root>\<widget name>\`, then opened with the iCUE tab shown. Base name = package file name up to `-<version>`; a marketplace name with spaces/platform suffix ("Daily Quote-1.1.1-windows") gives the typeId's last part ("daily-quote"). Never overwrites; zip-slip / absolute / link members refused before writing; file-count and size limits; staging folder renamed into place. This is the only feature that WRITES into WidgetsXE, and only on the user's explicit action.
+- Real-library tests updated to the current WidgetsXE data: Basketball Scores now declares `x-icue-widget-preview` (128x56 PNG), Rig Buddy supports keyboard/pump only.
+- Inspector tab padding reduced (6px, margin 2px) so four tabs fit 280 px without eliding.
+- Verified: iCUE 5 `ManifestValidator.cpp` does not require or read `min_app_version` (only the iCUE Apps CLI requires it), so a source with it works for both build targets.
+- Regression: 428 tests OK (+10 in `test_package_import.py`; library dock tests replaced by widgets-folder tests).
+
 ## D7a - Widget Library & Thumbnail Inspector (`widget_library.py`, `thumbnails.py`, `icue_theme.py`, `library_panel.py`, `main_window.py`)
+Note (U3): the dock (`library_panel.py`) described below no longer exists; its details are in the iCUE tab and the folder is the widgets folder (see U3).
 Source traced (iCUE v5.55): `htmlwidgetcore/src/HtmlParser.cpp`, `htmlbase/src/HtmlTypeInterfacesImpl.cpp`, `HtmlWidgetsRegistryBase.cpp`, `htmlwidgetcore/src/models/WidgetGroupsModel.cpp`,
 `screenmodule/.../groups/*` (WidgetGroupsModel, WidgetGroupListModel, WidgetBuilderGroupListItemModel, WidgetGroupPanelModel), `dashlcdui/models/panels/{DashboardWidgetPanelsModelImpl,WidgetGroupsModel,DashLCDWidgetPreviewPanelModel}.cpp`,
 `widgetsui/src/{WidgetPreviewModel,WidgetPanelsModelsFactoryImpl}.cpp`, `app/src/ui/panels/{WidgetSetupPanelsController,DashLCDWidgetsPannelController,KeyboardScreenModulePanelsController}.cpp`,

@@ -29,6 +29,8 @@ from test_settings_panel import BASKETBALL, RSS, SMOKECLOCK, classify_console_er
 from widgetdevtool.device_profiles import load_profiles  # noqa: E402
 from widgetdevtool.viewport import NATIVE  # noqa: E402
 from widgetdevtool.paths import ICUE_DIR, WIDGETS_DIR  # noqa: E402
+from widgetdevtool.icue_info_panel import inspect, summary  # noqa: E402
+from widgetdevtool.widgets_folder import detect_root  # noqa: E402
 from widgetdevtool.icue_theme import DEFAULT_ICON_FILE, PALETTE_FILE, PALETTE_SOURCE, load_palette  # noqa: E402
 from widgetdevtool.thumbnails import analyze, render_preview_tile, render_type_tile  # noqa: E402
 from widgetdevtool.widget_library import (  # noqa: E402
@@ -287,70 +289,100 @@ class LibraryUiTests(PageTestCase):
                                 devices=(("dashboard_lcd", ("sensor-screen",)),))
         self.pump_widget = make_widget(self.lib, "pump", title="Pump Only", wid="t.pump", devices=(("pump_lcd", ()),))
         self.lost = make_widget(self.lib, "lost", title="Lost Preview", wid="t.lost", icon="i.svg", preview="gone.png", files=files)
-        self.panel = self.window.library_panel
-        self.assertEqual(self.panel.set_library(self.lib), 5)
+        self.folder = self.window.widgets_folder
+        self.assertEqual(self.window.set_widgets_folder(self.lib), 5)
         self.settled = 0
         self.window.loadSettled.connect(lambda ok: setattr(self, "settled", self.settled + 1))
 
     def group_names(self) -> list[str]:
-        return [self.panel.tree.topLevelItem(i).text(0) for i in range(self.panel.tree.topLevelItemCount())]
+        groups, gone = build_groups(self.folder.entries, self.window.device)
+        return [g.name for g in groups] + ([f"Not listed ({len(gone)})"] if gone else [])
 
     def open_and_wait(self, folder: Path) -> None:
         count = self.settled
         shown = self.window.pick_instance(folder)
         reused = shown is not None and shown.id in self.window.runtimes  # A1: a running instance is selected, not reloaded
-        self.assertTrue(self.window.open_library_widget(folder))
+        self.assertTrue(self.window.open_folder(folder))
         self.assertTrue(self.wait(lambda: self.window.state.name == "LOADED" and (reused or self.settled > count)))
         self.assertTrue(self.wait(lambda: self.js("typeof iCUE_initialized !== 'undefined' && iCUE_initialized") is True))
         self.pump(0.2)
 
-    def test_the_tree_follows_the_selected_device_and_explains_what_is_missing(self) -> None:
+    def test_the_groups_follow_the_selected_device_and_explain_what_is_missing(self) -> None:
         self.assertEqual(self.group_names(), ["Clock Face", "Lost Preview", "Pump Only", "Solo"])  # no device: every valid widget
         self.window.select_device("dash_accessory_lcd")
-        self.assertEqual(self.panel.device.id, "dash_accessory_lcd")
+        self.assertEqual(self.folder.device.id, "dash_accessory_lcd")
         self.assertEqual(self.group_names(), ["Clock Face", "Lost Preview", "Solo", "Not listed (1)"])  # EDGE: "Pump Only" supports PumpLCD only
-        self.assertTrue(self.panel.select_widget(self.pump_widget))
-        self.assertIn("offers ['DashboardLCD']", self.panel.report.toPlainText())
+        self.assertIn("offers ['DashboardLCD']", self.report(self.pump_widget))
         self.window.select_device("link_generic_lcd")
-        listed = {self.panel.tree.topLevelItem(i).child(j).text(0) for i in range(self.panel.tree.topLevelItemCount())
-                  for j in range(self.panel.tree.topLevelItem(i).childCount())
-                  if not self.panel.tree.topLevelItem(i).text(0).startswith("Not listed")}
+        listed = {w.name for g in build_groups(self.folder.entries, self.window.device)[0] for w in g.widgets}
         self.assertNotIn("Solo", listed)  # sensor-screen needs the touch setup of XENEON EDGE
-        self.assertTrue(self.panel.select_widget(self.solo))
-        self.assertIn("sensor-screen", self.panel.report.toPlainText())
-        self.assertIn("NOT in a panel for iCUE LINK GENERIC LCD", self.panel.report.toPlainText())
+        self.assertIn("sensor-screen", self.report(self.solo))
+        self.assertIn("NOT in a panel for iCUE LINK GENERIC LCD", self.report(self.solo))
         self.window.select_device(None)
         self.assertIn("Solo", self.group_names())
 
-    def test_the_library_dock_is_opened_by_its_button(self) -> None:
-        self.assertTrue(self.window.library_dock.isHidden())
-        self.window.library_button.click()
-        self.assertFalse(self.window.library_dock.isHidden())
-        self.window.library_button.click()
-        self.assertTrue(self.window.library_dock.isHidden())
+    def report(self, folder: Path) -> str:
+        return inspect(folder, self.folder.entries, self.window.device).report
 
     def test_the_report_names_the_image_the_source_and_the_reason(self) -> None:
-        self.panel.select_widget(self.a)
-        text = self.panel.report.toPlainText()
+        text = self.report(self.a)
         self.assertIn("widget preview: x-icue-widget-preview", text)
         self.assertIn("declared: p.png", text)
         self.assertIn("(exists)", text)
         self.assertIn("type image: link rel=icon", text)
         self.assertIn("required by the validator, NOT used", text)
         self.assertIn("preview panel", text)
-        self.panel.select_widget(self.b)
-        self.assertIn("no x-icue-widget-preview: fall back to the type image", self.panel.report.toPlainText())
-        self.panel.select_widget(self.lost)
-        lost = self.panel.report.toPlainText()
-        self.assertIn("MISSING", lost)
-        self.assertIn("does NOT fall back", lost)
-        self.assertFalse(self.panel.preview_label.pixmap().isNull())
-        self.assertGreater(self.panel.type_label.pixmap().width(), 0)
+        self.assertIn("no x-icue-widget-preview: fall back to the type image", self.report(self.b))
+        lost = inspect(self.lost, self.folder.entries)
+        self.assertIn("MISSING", lost.report)
+        self.assertIn("does NOT fall back", lost.report)
+        self.assertEqual(summary(lost.findings)[0], "error")
+        self.assertIn("Preview file missing: gone.png", [f.text for f in lost.findings][0])
 
-    def test_opening_from_the_library_loads_the_widget_in_the_renderer_and_settings_editor(self) -> None:
-        self.assertTrue(self.panel.select_widget(self.b))
-        self.assertTrue(self.panel.open_button.isEnabled())
-        self.panel.open_button.click()
+    def test_open_widget_fills_the_icue_tab_with_the_group_of_the_library(self) -> None:
+        info = self.window.icue_info_panel
+        self.assertIsNone(info.inspection)
+        self.assertTrue(self.window.open_folder(self.a))  # Open Widget path, not the library
+        self.assertTrue(self.wait(lambda: self.window.state.name == "LOADED"))
+        self.assertEqual(info.inspection.entry.type_id, "t.a")
+        self.assertTrue(info.inspection.in_library)
+        self.assertEqual(len(info.inspection.group.widgets), 2)  # Clock A + Clock B share 'Clock Face'
+        self.assertTrue(info.inspection.group.preview_panel)
+        self.assertIn("widget preview: x-icue-widget-preview", info.report.toPlainText())
+        self.assertFalse(info.preview_tile.pixmap().isNull())
+        self.assertGreater(info.type_tile.pixmap().width(), 0)
+        alone = inspect(self.a)  # no library: only this widget is known, and the panel says so
+        self.assertFalse(alone.in_library)
+        self.assertEqual(len(alone.group.widgets), 1)
+        self.assertTrue(any("only this widget is known" in f.text for f in alone.findings))
+
+    def test_the_widgets_folder_is_detected_from_the_first_widget_and_remembered(self) -> None:
+        self.assertFalse(hasattr(self.window, "library_button") or hasattr(self.window, "library_dock"))  # no Widget Library UI any more
+        self.window.set_widgets_folder(None)
+        self.assertIsNone(self.folder.root)
+        self.open_and_wait(self.a)
+        self.assertEqual(self.folder.root, self.lib.resolve())  # the nearest parent that holds several widgets
+        self.assertEqual(len(self.window.icue_info_panel.inspection.group.widgets), 2)
+        self.assertIn(str(self.lib.resolve()), self.window.icue_info_panel.folder_label.text())
+        path = Path(self._tmp.name) / "workspace.json"
+        self.window.save_workspace(path)
+        self.window.set_widgets_folder(None)
+        self.window.restore_workspace(path)
+        self.assertEqual(self.folder.root, self.lib.resolve())  # remembered: not asked again
+        self.assertEqual(len(self.folder.entries), 5)
+
+    def test_a_widget_without_sibling_widgets_sets_no_widgets_folder(self) -> None:
+        self.window.set_widgets_folder(None)
+        own = tempfile.TemporaryDirectory()  # its own temp folder: nothing next to it but this one widget
+        self.addCleanup(own.cleanup)
+        alone = make_widget(Path(own.name), "only", title="Only", wid="t.only")
+        self.assertIsNone(detect_root(alone))  # its parent holds one widget; the temp folder above is never scanned
+        self.assertTrue(self.window.open_folder(alone))
+        self.assertIsNone(self.folder.root)
+        self.assertFalse(self.window.icue_info_panel.inspection.in_library)
+
+    def test_opening_a_widget_loads_it_in_the_renderer_and_settings_editor(self) -> None:
+        self.assertTrue(self.window.open_folder(self.b))
         self.assertTrue(self.wait(lambda: self.window.state.name == "LOADED"))
         self.assertEqual(self.window.current.folder, self.b)
         self.assertIn("level", self.window.settings_panel.editors)
@@ -365,7 +397,7 @@ class LibraryUiTests(PageTestCase):
         self.window.select_device("dash_accessory_lcd", "SizeL", "portrait")
         self.window.viewport_frame.set_scale(NATIVE)
         bridge, settled = self.window.bridge, self.settled
-        self.assertTrue(self.window.open_library_widget(self.a))  # the shown widget again: nothing happens
+        self.assertTrue(self.window.open_folder(self.a))  # the shown widget again: nothing happens
         self.pump(0.3)
         self.assertEqual((self.window.bridge is bridge, self.settled, self.window.reload_count), (True, settled, 0))
         self.open_and_wait(self.b)
@@ -401,11 +433,11 @@ class LibraryUiTests(PageTestCase):
 class RealLibraryTests(PageTestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.panel = self.window.library_panel
-        self.count = self.panel.set_library(WIDGETS)
+        self.folder = self.window.widgets_folder
+        self.count = self.window.set_widgets_folder(WIDGETS)
 
     def entry(self, name: str):
-        return next(e for e in self.panel.entries if e.name == name)
+        return next(e for e in self.folder.entries if e.name == name)
 
     def runtime_errors(self, folder: Path | None = None) -> list[str]:
         """Runtime-class console errors of the widget in `folder` (a late error of the page that was just left is not counted)."""
@@ -416,41 +448,49 @@ class RealLibraryTests(PageTestCase):
     def test_metadata_of_the_real_widgets(self) -> None:
         self.assertGreaterEqual(self.count, 25)
         basketball, smoke = self.entry("Basketball Scores"), self.entry("Smoke Clock")
-        self.assertEqual((basketball.icon_href, basketball.preview_expr, basketball.group_declared), ("resources/basketball.svg", "", False))
-        self.assertEqual((basketball.preview_image().source, basketball.type_image().exists, basketball.group_name), (SRC_ICON, True, "Basketball Scores"))
+        self.assertEqual((basketball.icon_href, basketball.preview_expr, basketball.group_declared),
+                         ("resources/basketball.svg", "resources/preview.png", False))
+        self.assertEqual((basketball.preview_image().source, basketball.preview_image().exists, basketball.type_image().source,
+                          basketball.type_image().exists, basketball.group_name), (SRC_PREVIEW, True, SRC_ICON, True, "Basketball Scores"))
+        self.assertEqual(analyze(basketball.preview_image()).natural, (128, 56))
         self.assertEqual((smoke.group_name, smoke.preview_image().source, smoke.preview_image().exists), ("Clock Face", SRC_PREVIEW, True))
         self.assertTrue(basketball.manifest_preview_icon)  # present in the manifest, not used for any thumbnail
         self.assertEqual(analyze(smoke.preview_image()).natural, (128, 56))
 
     def test_clock_face_group_and_basketball_group(self) -> None:
-        groups, unlisted = build_groups(self.panel.entries, EDGE)
+        groups, unlisted = build_groups(self.folder.entries, EDGE)
         by = {g.name: g for g in groups}
-        self.assertEqual(unlisted, [])
+        # every valid widget is listed for XENEON EDGE unless its manifest names other device types (e.g. keyboard/pump only)
+        self.assertTrue(all(u.reason.startswith("not supported by the device") and "offers ['DashboardLCD']" in u.reason for u in unlisted),
+                        [u.reason for u in unlisted])
+        self.assertNotIn("Basketball Scores", {u.entry.name for u in unlisted})
         self.assertTrue({"Smoke Clock", "Robex Tourbillon", "MoonPhase Clock"} <= {w.name for w in by["Clock Face"].widgets})
         self.assertTrue(by["Clock Face"].preview_panel)
         self.assertEqual([w.name for w in by["Basketball Scores"].widgets], ["Basketball Scores"])
         self.assertFalse(by["Basketball Scores"].preview_panel)
         self.assertIn("no preview panel", by["Basketball Scores"].preview_reason)
-        links, gone = build_groups(self.panel.entries, LINK)
+        links, gone = build_groups(self.folder.entries, LINK)
         self.assertIn("Basketball Scores", {u.entry.name for u in gone})
         self.assertTrue(all("sensor-screen" in u.reason or "offers" in u.reason for u in gone))
 
     def test_a_dark_svg_alone_does_not_make_the_ticket(self) -> None:
-        """Basketball Scores' SVG is black on transparent: invisible on the black AssetIcon background, visible in the 16x16 type tile.
-        But the preview-panel row exists only for a group with more than one widget, and Basketball Scores is alone in its group."""
+        """Basketball Scores' SVG icon is black on transparent: invisible on the black AssetIcon background, visible in the 16x16 type
+        tile. The widget now declares x-icue-widget-preview (a 128x56 PNG), so the preview row no longer draws the SVG at all; and the
+        preview-panel row exists only for a group with more than one widget, while Basketball Scores is alone in its group."""
         entry = self.entry("Basketball Scores")
-        stats = analyze(entry.preview_image())
-        self.assertTrue(stats.dark_on_layer1)
-        row = render_preview_tile(entry.preview_image())
+        self.assertTrue(analyze(entry.type_image()).dark_on_layer1)
+        self.assertEqual(entry.preview_image().source, SRC_PREVIEW)
+        self.assertFalse(analyze(entry.preview_image()).dark_on_layer1)  # the PNG preview is not the dark SVG
+        row = render_preview_tile(entry.type_image())  # what the row would show if the icon were the preview (the old state)
         self.assertEqual(row.pixelColor(69, 33).name(), "#000000")
         tile = render_type_tile(entry.type_image())
         self.assertTrue(any(tile.pixelColor(x, y).name() == PAL["layer8"].name() for x in range(27, 43) for y in range(12, 28)))
-        groups, _ = build_groups(self.panel.entries, EDGE)
+        groups, _ = build_groups(self.folder.entries, EDGE)
         group = next(g for g in groups if entry in g.widgets)
         self.assertFalse(group.preview_panel)  # so this redraw is not the panel the ticket shows: which panel and condition is still open
 
     def test_every_declared_image_is_reported_consistently(self) -> None:
-        for entry in self.panel.entries:
+        for entry in self.folder.entries:
             for resolved in (entry.preview_image(), entry.type_image()):
                 self.assertEqual(resolved.usable_path is None, (not resolved.exists) and resolved.source != SRC_DEFAULT, entry.name)
                 self.assertTrue(render_preview_tile(resolved).size().width() == 138)
@@ -459,8 +499,7 @@ class RealLibraryTests(PageTestCase):
         self.window.resize(1500, 900)
         results = {}
         for name, folder in (("Basketball Scores", BASKETBALL), ("Smoke Clock", SMOKECLOCK), ("RSS Feed Reader", RSS)):
-            self.assertTrue(self.panel.select_widget(folder))
-            self.panel.open_button.click()
+            self.assertTrue(self.window.open_folder(folder))
             self.assertTrue(self.wait(lambda: self.window.state.name == "LOADED", 30))
             self.assertTrue(self.wait(lambda: self.js("typeof iCUE_initialized !== 'undefined' && iCUE_initialized") is True, 30))
             self.pump(1.0)
@@ -474,9 +513,9 @@ class RealLibraryTests(PageTestCase):
         self.pump(0.3)
         rss_instance = self.window.bridge.instance
         self.assertEqual(rss_instance.data[key], "kept")
-        self.assertTrue(self.window.open_library_widget(BASKETBALL))
+        self.assertTrue(self.window.open_folder(BASKETBALL))
         self.assertTrue(self.wait(lambda: self.window.state.name == "LOADED" and self.window.bridge.instance is results["Basketball Scores"][0], 30))
-        self.assertTrue(self.window.open_library_widget(RSS))
+        self.assertTrue(self.window.open_folder(RSS))
         self.assertTrue(self.wait(lambda: self.window.state.name == "LOADED" and self.window.bridge.instance is rss_instance, 30))
         self.pump(1.0)
         self.assertEqual(rss_instance.data[key], "kept")
@@ -484,7 +523,7 @@ class RealLibraryTests(PageTestCase):
         # the widgets call the network on their own (Basketball Scores logs "Failed to fetch scores"): the errors of the second load must be
         # the ones of the first load of the same widget, nothing new
         self.assertEqual(self.runtime_errors(RSS), results["RSS Feed Reader"][2])
-        self.assertTrue(self.window.open_library_widget(BASKETBALL))
+        self.assertTrue(self.window.open_folder(BASKETBALL))
         self.assertTrue(self.wait(lambda: self.window.state.name == "LOADED", 30))
         self.pump(1.5)
         self.assertEqual(self.runtime_errors(BASKETBALL), results["Basketball Scores"][2])

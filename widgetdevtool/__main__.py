@@ -25,9 +25,12 @@ def main(argv: list[str] | None = None) -> int:
         except (OSError, ValueError) as exc:
             window.status.setText(f"Workspace not restored: {exc}")
 
-    # Optional: python -m widgetdevtool <widget folder>
+    # Optional: python -m widgetdevtool <widget folder | package.icuewidget>
     if len(argv) > 1:
-        window.open_folder(argv[1])  # reuses the instance of that folder from the workspace (no duplicate)
+        if argv[1].lower().endswith(".icuewidget"):
+            window.open_package(argv[1])  # extracted into the widgets folder (asks first), or the existing source is opened
+        else:
+            window.open_folder(argv[1])  # reuses the instance of that folder from the workspace (no duplicate)
 
     return app.exec()
 
